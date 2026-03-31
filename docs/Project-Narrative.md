@@ -1,96 +1,28 @@
-# Dawgstagram
+# Stock Market App
 
 ## Purpose
 
-<!-- Clearly state the main idea and intended purpose of your application.
-Explain a problem your application aims to solve and why it is important. -->
+The purpose of our Stock Market App is to help users better understand the stock market, track investments, and make informed financial decisions in an accessible way. Many beginner investors are interested in stocks but feel overwhelmed by confusing market data, changing prices, and financial language that is hard to fully understand. Our application aims to solve that problem by organizing stock information into a clearer, more user-friendly dashboard that highlights important trends such as the greatest growing stocks, recommended stocks, and stocks that have recently dropped. 
+This project is important because more people are becoming interested in investing, but many don’t have the tools or experience needed to confidently invest in the market. Existing financial platforms can feel too advanced for casual users or students who are still learning. Our app combines useful stock data with personalized features such as favorites, performance reports, a simulation account, and an AI chatbot to create a more supportive experience. The chatbot, powered by Gemini, will give users a way to ask questions about dips, gains, or market activity in plain language. Overall, the goal of our app is to make stock tracking, learning, and practice investing more approachable, educational, and engaging for everyday users.
 
-<blockquote cite="https://blogs.loc.gov/catbird/2021/01/for-there-is-always-light-amanda-gormans-inaugural-poem-the-hill-we-climb-delivers-message-of-unity/">"For there is always light,<br>if only we're brave enough to see it.<br>If only we're brave enough to be it."</blockquote>
-
-_-Amanda Gorman, Poet and Activist_
-
-While we should commit ourselves to the long, slow, never-ending work of improving ourselves and our world, we can also benefit from small sparks of joy.
-
-**Dawgstagram facilitates personal curation and sharing of canine imagery.**
-
-This is app is for everyone: people who already love 😍 dogs 🐶, and those who will soon!
-Its purpose is to facilitate the curation and sharing "dawgs": dog images (with optional visual effects/transformations called "filters").
-
-<!-- I doubt this meets the word count guideline... look at this first result for "vscode word count" https://github.com/microsoft/vscode-wordcount 😆 -->
 
 ## Users
 
-<!-- Identify the primary users of your application, including their background or needs.
-Justify how your application will benefit these users and improve their experience. -->
+The primary users of our application are beginner investors, college students, and casual market watchers who want an easier way to follow stocks and learn about investing. These users may have limited financial knowledge, little experience with trading platforms, or may simply want a less intimidating environment to explore the stock market. Some users may already have favorite stocks they want to monitor, while others may want a place to practice investing without using real money. Our app is designed to meet both of these needs by offering real market updates alongside a simulation account for learning and experimentation.
 
-Dawgstagram values inclusivity and accessibility ("a11y").
-It is designed primarily for people who love dogs and those who will soon love them.
-
-### Background
-
-The intended audience for Dawgstagram is people who can read and/or listen to natural language.
-Those without visual impairments will be able to see the _dawgs_, and those with visual impairments will be able to hear the descriptions of the _dawgs_.
-The _dawgs_ will include metadata indicating the (natural) languages their creator has added.
-Creators may create _dawgs_ in whatever languages they wish.
-
-Dawgstagram is intended to be used by people with and without programming experience.
-Those creators without programming experience can apply existing filters to their _dawgs_.
-Those creators with programming experience can create new filters to apply to their _dawgs_.
-
-### Needs
-
-The intended users of Dawgstagram include those with needs such as: 
-
-1. to view dogs without filters or with filters (in which case we call them _dawgs_)
-2. to share _dawgs_ with friends and family ("framily")
+This application will benefit users by simplifying the investing experience and presenting information in a more understandable way. Instead of forcing users to search across multiple websites, the app gathers useful market data in one place and personalizes it through favorite stock tracking and custom reports. The reports page helps users understand gains, losses, and trends over time using graphs and summaries. The chatbot also improves the user experience by allowing users to ask questions such as why a stock dipped or why a company is trending upward. This is especially helpful for beginners who may not understand market events right away. By combining education, personalization, and simulation tools, the app makes investing feel less confusing and more manageable.
 
 ## Features
 
-<!-- Outline the core functionalities of your application and explain how they will work.
-Provide a concrete example demonstrating how the application fulfills its purpose. -->
+Our Stock Market App includes several core features that work together to support both market tracking and investment practice. The home page will display categories such as greatest growing stocks, recommended stocks, and stocks that have recently dropped. This gives users a quick overview of what is happening in the market without needing to search. The Favorited Stocks page will allow users to save stocks they care about and view updates focused specifically on those selections. The Reports page will display graphs and summaries based on the user’s favorite stocks and simulation activity, including profit and loss, changes in value, and indicators of whether the user’s investing choices appear safe or risky.
 
-People who use Dawgstagram will:
-
-1. search for dog images by breed and can create, read, update, and delete (<abbr title="Create, Read, Update, Delete">CRUD</abbr>):
-    * favorite dog images from
-        * the [Dog API](https://dog.ceo/dog-api/)
-        * images available via URL elsewhere on the web
-    * custom lists of dog images
-    * custom "filters" (visual transformations) for dog images
-        * in their favorites or other lists, they may have filters applied to the images
-2. share links that show the visitor a dog image (potentially with a filter applied)
-
+Another major feature is the chatbot, which appears as a button in the corner of the screen and opens a chat window when clicked. This chatbot will use the Gemini API to answer questions about stock behavior, market dips, sudden increases, and other user concerns. The app will also include a simulation where users can buy and sell stocks with virtual money, track performance over time, and learn investing strategies without financial risk. For example, a user could favorite Apple and Tesla, view their trends, buy shares in a simulated portfolio, and then ask the chatbot why one stock suddenly dropped. This directly supports the app’s goal of making stock learning interactive and understandable.
 
 ## Data
 
-<!-- Describe the types of data that users will create, read, update, and delete (CRUD).
-Include an example of this data using either real or representative sample values. -->
+The app handles data through standard CRUD operations split between local storage and the Finnhub API.	
+Users create data by adding stocks to their portfolio. Each entry is saved to local storage as an object containing the ticker symbol, number of shares, purchase price, and an object of transaction information. For example, adding Apple might look like: { ticker: "AAPL", shares: 10, transactions: [{ type: "buy", shares: 10, price: 189.50, date: "2025-03-30" }] }. The transaction object will contain the transaction type, quantity, price, and date in order to log multiple orders and sales. 
+Users read data two ways. Portfolio entries are pulled from local storage to populate the Favorites and Reports pages, while live market data like current price, percent change, and company details are read from the Finnhub API using each saved ticker and calling the proper endpoint.
+Users update data by buying or selling shares of an existing portfolio entry. Each transaction appends a new entry to that stock's transaction log and updates the total share count accordingly. For example, a follow-up purchase of 5 more shares would add { type: "buy", shares: 5, price: 192.00, date: "2025-04-02" } to the log, bringing the total to 15 shares. This preserves full purchase history for use in the Reports page. 
+Users delete data by removing a stock from their portfolio, which clears that entry from local storage and removes it from all related pages.
 
-### Dawg
-
-1. src: string - http(s) url to an image or [data URL](https://developer.mozilla.org/en-US/docs/Web/URI/Reference/Schemes/data) of base-64-encoded image data.
-2. handle: string
-3. filter: string
-4. metadata: object
-    1. language (string) keys map to objects with:
-        1. title: string
-        2. body: string
-
-### DawgList
-
-1. handle: string (`Favorites` is created automatically by Dawgstagram, but other lists can also be created)
-2. dawgs: string[] - list of _Dawg_ handles
-
-### Filter
-
-1. handle: string
-2. code: string
-3. metadata: object
-    1. language (string) keys map to objects with:
-        1. title: string
-        2. description: string
-        3. instructions: string
-
-## References
-
-1. [Caman: a CAnvas MANipulation library for Javascript](https://github.com/meltingice/CamanJS)
