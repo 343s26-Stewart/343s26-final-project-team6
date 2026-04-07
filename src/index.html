@@ -3,10 +3,49 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dawgstagram</title>
-    <link rel="icon" href="https://fav.mhciael.com/🐶">
+    <title>StalkStocks</title>
+    <link rel="stylesheet" href="./styles/globals.css">
+    <link rel="stylesheet" href="./styles/index.css">
 </head>
 <body>
-    <h1>Dawgstagram</h1>
+
+    <!-- DESKTOP NAV -->
+    <nav id="nav-desktop">
+        <a href="#" id="logo">StalkStocks</a>
+        <div id="nav-desktop-links">
+          <a href="home.html" class="nav-link">Link</a>
+          <a href="home.html" class="nav-link">Link</a>
+          <a href="home.html" class="nav-link">Link</a>
+        </div>
+    </nav>
+
+    <nav id="nav-mobile">
+        <a href="#" id="logo">StalkStocks</a>
+        <button id="nav-menu-button" aria-label="Open menu">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" 
+                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" 
+                stroke-linejoin="round" id="nav-menu-svg">
+                <path d="M4 5h16"/>
+                <path d="M4 12h16"/>
+                <path d="M4 19h16"/>
+            </svg>
+        </button>
+    </nav>
+
+    <div id="mobile-menu">
+        <a href="home.html" class="mobile-menu-link">Link</a>
+        <a href="home.html" class="mobile-menu-link">Link</a>
+        <a href="home.html" class="mobile-menu-link">Link</a>
+    </div>
+
+    <!-- HERO -->
+    <main id="hero">
+        <h1 id="hero-header">Learn stocks without the noise.</h1>
+        <p id="hero-subtext">
+            New to investing in stocks? Learn how to invest, free of cost!
+        </p>
+        <a href="./home.html"><button id="hero-start-button">Get Started</button></a>
+    </main>
+    <script src="./scripts/index.js"></script>
 </body>
 </html>
