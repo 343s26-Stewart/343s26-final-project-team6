@@ -1,5 +1,5 @@
 .simulation-page {
-    width: min(1250px, 94%);
+    width: 94%;
     margin: 0 auto;
     padding: 1.5rem 0 3rem;
     position: relative;
@@ -7,35 +7,33 @@
 
 .simulation-layout {
     display: flex;
-    gap: 1.25rem;
+    gap: 1rem;
     align-items: flex-start;
 }
 
-.simulation-left {
-    flex: 1.9;
+.simulation-left,
+.simulation-right {
     display: flex;
     flex-direction: column;
     gap: 1rem;
 }
 
+.simulation-left {
+    flex: 2;
+}
+
 .simulation-right {
-    flex: 0.95;
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
+    flex: 1;
 }
 
 .chart-card,
 .side-card,
 .summary-card,
-.trade-log-card {
+.trade-log-card,
+.chatbot-panel {
     background-color: #0f172a;
     border: 1px solid #334155;
-    border-radius: 16px;
-    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.18);
-}
-
-.chart-card {
+    border-radius: 10px;
     padding: 1rem;
 }
 
@@ -43,22 +41,18 @@
     display: flex;
     justify-content: space-between;
     gap: 1rem;
-    align-items: flex-start;
     margin-bottom: 1rem;
 }
 
 .eyebrow {
     color: #4ade80;
-    font-size: 0.85rem;
-    font-weight: 700;
-    margin-bottom: 0.35rem;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
+    font-size: 0.9rem;
+    font-weight: bold;
 }
 
 #stock-title {
-    font-size: clamp(1.8rem, 4vw, 2.5rem);
-    margin-bottom: 0.25rem;
+    font-size: 2rem;
+    margin: 0.25rem 0;
 }
 
 .muted-text {
@@ -66,51 +60,44 @@
 }
 
 .price-badge {
-    background-color: #111c30;
-    border: 1px solid #334155;
-    border-radius: 14px;
-    padding: 0.8rem 1rem;
-    min-width: 140px;
     text-align: right;
 }
 
 .price-label {
     display: block;
-    font-size: 0.8rem;
     color: #94a3b8;
-    margin-bottom: 0.2rem;
+    font-size: 0.85rem;
 }
 
 #current-price {
-    font-size: 1.35rem;
-    font-weight: 700;
+    font-size: 1.3rem;
+    font-weight: bold;
     color: #4ade80;
 }
 
 .chart-toolbar {
     display: flex;
-    gap: 0.6rem;
+    gap: 0.5rem;
     margin-bottom: 1rem;
 }
 
 .chart-filter {
-    padding: 0.5rem 0.85rem;
+    padding: 0.45rem 0.8rem;
     border-radius: 999px;
     background-color: #1e293b;
-    color: #e2e8f0;
+    color: #f8fafc;
     border: 1px solid #334155;
 }
 
 .chart-filter.active {
     background-color: #4ade80;
     color: #0f172a;
-    font-weight: 700;
+    font-weight: bold;
 }
 
 .chart-area {
     width: 100%;
-    overflow: hidden;
-    border-radius: 14px;
+    overflow-x: auto;
 }
 
 #price-chart {
@@ -126,7 +113,7 @@
 .grid-line {
     stroke: #334155;
     stroke-width: 1;
-    stroke-dasharray: 4 7;
+    stroke-dasharray: 4 6;
 }
 
 .axis-line {
@@ -137,7 +124,7 @@
 .chart-label,
 .time-label {
     fill: #94a3b8;
-    font-size: 16px;
+    font-size: 14px;
 }
 
 #chart-line {
@@ -150,18 +137,14 @@
     gap: 1rem;
 }
 
-.summary-card {
-    padding: 1rem;
-}
-
 .summary-label {
     color: #94a3b8;
-    margin-bottom: 0.45rem;
+    margin-bottom: 0.4rem;
 }
 
 .summary-value {
-    font-size: 1.45rem;
-    font-weight: 700;
+    font-size: 1.3rem;
+    font-weight: bold;
 }
 
 .pnl-positive {
@@ -172,16 +155,8 @@
     color: #f87171;
 }
 
-.trade-log-card {
-    padding: 1rem;
-}
-
 .panel-header {
-    margin-bottom: 0.9rem;
-}
-
-.panel-header h2 {
-    margin-bottom: 0.2rem;
+    margin-bottom: 0.75rem;
 }
 
 .trade-log {
@@ -190,33 +165,28 @@
     gap: 0.75rem;
 }
 
-.trade-log-item {
+.trade-log-item,
+.watchlist-item {
     display: flex;
     justify-content: space-between;
     gap: 1rem;
-    padding: 0.85rem 0.9rem;
+    padding: 0.75rem;
     background-color: #111c30;
     border: 1px solid #334155;
-    border-radius: 12px;
-}
-
-.trade-log-left strong {
-    display: block;
-    margin-bottom: 0.2rem;
+    border-radius: 8px;
 }
 
 .trade-log-left span,
-.trade-log-right {
+.trade-log-right,
+.watchlist-company,
+.empty-message,
+.status-text {
     color: #94a3b8;
-    font-size: 0.95rem;
-}
-
-.side-card {
-    padding: 1rem;
 }
 
 .selected-stock-box {
-    display: grid;
+    display: flex;
+    flex-direction: column;
     gap: 0.7rem;
 }
 
@@ -224,29 +194,12 @@
     display: flex;
     justify-content: space-between;
     gap: 1rem;
-    padding: 0.65rem 0;
-    border-bottom: 1px solid #334155;
-}
-
-.stock-meta-line:last-child {
-    border-bottom: none;
 }
 
 .watchlist {
     display: flex;
     flex-direction: column;
-    gap: 0.65rem;
-}
-
-.watchlist-item {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 1rem;
-    background-color: #111c30;
-    border: 1px solid #334155;
-    border-radius: 12px;
-    padding: 0.75rem 0.85rem;
+    gap: 0.75rem;
 }
 
 .watchlist-left {
@@ -255,20 +208,21 @@
 }
 
 .watchlist-symbol {
-    font-weight: 700;
+    font-weight: bold;
 }
 
-.watchlist-company {
-    color: #94a3b8;
-    font-size: 0.9rem;
+.watchlist-load,
+.buy-button,
+.sell-button,
+.chatbot-input-row button {
+    padding: 0.6rem 0.9rem;
+    border-radius: 8px;
+    font-weight: bold;
 }
 
 .watchlist-load {
     background-color: #334155;
     color: #f8fafc;
-    padding: 0.45rem 0.7rem;
-    border-radius: 8px;
-    font-weight: 700;
 }
 
 .trade-form {
@@ -278,13 +232,13 @@
 }
 
 .trade-form label {
-    font-weight: 700;
-    color: #e2e8f0;
+    font-weight: bold;
 }
 
-.trade-form input {
-    padding: 0.9rem 1rem;
-    border-radius: 10px;
+.trade-form input,
+.chatbot-input-row input {
+    padding: 0.8rem;
+    border-radius: 8px;
     border: 1px solid #475569;
     background-color: #1e293b;
     color: #f8fafc;
@@ -296,14 +250,6 @@
     margin-top: 0.4rem;
 }
 
-.buy-button,
-.sell-button {
-    flex: 1;
-    padding: 0.85rem 1rem;
-    border-radius: 10px;
-    font-weight: 700;
-}
-
 .buy-button {
     background-color: #b7f1bf;
     color: #0f172a;
@@ -311,45 +257,29 @@
 
 .sell-button {
     background-color: #dc2626;
-    color: #ffffff;
-}
-
-.status-text {
-    min-height: 1.5rem;
-    margin-top: 0.3rem;
-    color: #cbd5e1;
-}
-
-.empty-message {
-    color: #94a3b8;
+    color: white;
 }
 
 .chatbot-toggle {
     position: fixed;
-    left: 1.5rem;
-    bottom: 1.5rem;
-    width: 68px;
-    height: 68px;
-    border-radius: 999px;
+    left: 1rem;
+    bottom: 1rem;
+    width: 65px;
+    height: 65px;
+    border-radius: 50%;
     background-color: #93c5fd;
     color: #0f172a;
-    font-weight: 700;
-    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.28);
-    z-index: 1200;
+    font-weight: bold;
+    z-index: 1000;
 }
 
 .chatbot-panel {
     position: fixed;
-    left: 1.5rem;
-    bottom: 6.5rem;
-    width: min(360px, calc(100vw - 2rem));
-    background-color: #0f172a;
-    border: 1px solid #334155;
-    border-radius: 18px;
-    overflow: hidden;
-    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.35);
+    left: 1rem;
+    bottom: 5.8rem;
+    width: min(340px, calc(100vw - 2rem));
     display: none;
-    z-index: 1200;
+    z-index: 1000;
 }
 
 .chatbot-panel.open {
@@ -360,39 +290,33 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 0.9rem 1rem;
-    border-bottom: 1px solid #334155;
-}
-
-.chatbot-header h2 {
-    font-size: 1rem;
+    margin-bottom: 0.75rem;
 }
 
 #chatbot-close {
-    font-size: 1.4rem;
+    font-size: 1.3rem;
     color: #f8fafc;
 }
 
 .chatbot-messages {
-    padding: 1rem;
-    max-height: 280px;
+    max-height: 220px;
     overflow-y: auto;
     display: flex;
     flex-direction: column;
-    gap: 0.8rem;
+    gap: 0.75rem;
+    margin-bottom: 0.75rem;
 }
 
 .bot-message,
 .user-message {
-    padding: 0.8rem 0.9rem;
-    border-radius: 12px;
+    padding: 0.75rem;
+    border-radius: 8px;
     max-width: 90%;
 }
 
 .bot-message {
     background-color: #1e293b;
-    color: #e2e8f0;
-    align-self: flex-start;
+    color: #f8fafc;
 }
 
 .user-message {
@@ -403,31 +327,13 @@
 
 .chatbot-input-row {
     display: flex;
-    gap: 0.6rem;
-    padding: 0 1rem 1rem;
-}
-
-.chatbot-input-row input {
-    flex: 1;
-    padding: 0.8rem 0.9rem;
-    border-radius: 10px;
-    border: 1px solid #475569;
-    background-color: #1e293b;
-    color: #f8fafc;
-}
-
-.chatbot-input-row button {
-    background-color: #4ade80;
-    color: #0f172a;
-    font-weight: 700;
-    border-radius: 10px;
-    padding: 0 1rem;
+    gap: 0.5rem;
 }
 
 .site-footer {
-    width: min(1250px, 94%);
+    width: 94%;
     margin: 0 auto;
-    padding: 0 0 2rem;
+    padding-bottom: 2rem;
     text-align: center;
     color: #94a3b8;
 }
@@ -445,28 +351,19 @@
     .simulation-summary-row {
         grid-template-columns: 1fr;
     }
-
-    .simulation-right {
-        width: 100%;
-    }
 }
 
 @media (max-width: 640px) {
-    .chart-header {
+
+    .chart-header,
+    .trade-buttons,
+    .chatbot-input-row {
         flex-direction: column;
     }
 
-    .trade-buttons {
-        flex-direction: column;
-    }
-
-    .chatbot-toggle {
-        left: 1rem;
-        bottom: 1rem;
-    }
-
-    .chatbot-panel {
-        left: 1rem;
-        bottom: 5.8rem;
+    .buy-button,
+    .sell-button,
+    .chatbot-input-row button {
+        width: 100%;
     }
 }
