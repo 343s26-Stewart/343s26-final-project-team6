@@ -2,7 +2,6 @@ body {
   padding: 0 0;
 }
 
-
 /* HERO */
 #hero {
   min-height: calc(100vh - 100px);
@@ -51,11 +50,11 @@ body {
 /* MOBILE */
 @media (max-width: 768px) {
   body {
-    padding: 0 1.25rem;
+    padding: 0 0;
   }
 
   #nav-desktop {
-    padding: 1.25rem 0;
+    padding: 1.25rem 1.25rem;
   }
 
   #hero {

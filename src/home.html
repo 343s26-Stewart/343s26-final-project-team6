@@ -7,33 +7,36 @@
     <link rel="stylesheet" href="./styles/globals.css">
 </head>
 <body>
-    <!-- DESKTOP NAV -->
-    <nav id="nav-desktop">
-        <a href="#" id="logo">StalkStocks</a>
+    <!-- NAVS -->
+    <header id="site-header">
+      <nav id="nav-desktop">
+        <a href="index.html" id="logo">StalkStocks</a>
         <div id="nav-desktop-links">
           <a href="home.html" class="nav-link">Home</a>
           <a href="simulation.html" class="nav-link">Simulation</a>
           <a href="reports.html" class="nav-link">Reports</a>
         </div>
-    </nav>
+      </nav>
 
-    <nav id="nav-mobile">
-        <a href="#" id="logo">StalkStocks</a>
+      <nav id="nav-mobile">
+        <a href="index.html" id="logo">StalkStocks</a>
         <button id="nav-menu-button" aria-label="Open menu">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" 
-                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" 
-                stroke-linejoin="round" id="nav-menu-svg">
-                <path d="M4 5h16"/>
-                <path d="M4 12h16"/>
-                <path d="M4 19h16"/>
-            </svg>
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" 
+              fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" 
+              stroke-linejoin="round" id="nav-menu-svg">
+              <path d="M4 5h16"/>
+              <path d="M4 12h16"/>
+              <path d="M4 19h16"/>
+          </svg>
         </button>
-    </nav>
+      </nav>
 
-    <div id="mobile-menu">
+      <div id="mobile-menu">
         <a href="home.html" class="mobile-menu-link">Home</a>
         <a href="home.html" class="mobile-menu-link">Simulation</a>
         <a href="home.html" class="mobile-menu-link">Reports</a>
-    </div>
+      </div>
+    </header>
+    <script src="./scripts/mobile-nav.js"></script>
 </body>
 </html>

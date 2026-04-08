@@ -28,6 +28,12 @@ button {
 }
 
 /* GLOBAL NAV STYLES */
+#site-header {
+  position: relative;
+  z-index: 100;
+  width: 100%;
+}
+
 #nav-desktop,
 #nav-mobile {
   width: 100%;
@@ -77,16 +83,16 @@ button {
 
 /* Mobile dropdown menu */
 #mobile-menu {
-  position: absolute;        /* float over content */
-  top: 100%;                 /* just below the nav */
+  position: absolute;
+  top: 100%;
   left: 0;
+  right: 0;
   width: 100%;
   background-color: #1D293B;
   flex-direction: column;
-  display: none;             /* hidden by default */
+  display: none;
   padding: 1rem 2rem;
   gap: 1rem;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.3);
   z-index: 1000;
   transition: all 0.3s ease;
 }
