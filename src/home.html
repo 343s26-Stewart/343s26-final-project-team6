@@ -1,31 +1,33 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <link rel="stylesheet" href="./styles/globals.css">
+    <link rel="stylesheet" href="./styles/home.css">
 </head>
+
 <body>
     <!-- DESKTOP NAV -->
     <nav id="nav-desktop">
         <a href="#" id="logo">StalkStocks</a>
         <div id="nav-desktop-links">
-          <a href="home.html" class="nav-link">Home</a>
-          <a href="simulation.html" class="nav-link">Simulation</a>
-          <a href="reports.html" class="nav-link">Reports</a>
+            <a href="home.html" class="nav-link">Home</a>
+            <a href="simulation.html" class="nav-link">Simulation</a>
+            <a href="reports.html" class="nav-link">Reports</a>
         </div>
     </nav>
 
     <nav id="nav-mobile">
         <a href="#" id="logo">StalkStocks</a>
         <button id="nav-menu-button" aria-label="Open menu">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" 
-                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" 
-                stroke-linejoin="round" id="nav-menu-svg">
-                <path d="M4 5h16"/>
-                <path d="M4 12h16"/>
-                <path d="M4 19h16"/>
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" id="nav-menu-svg">
+                <path d="M4 5h16" />
+                <path d="M4 12h16" />
+                <path d="M4 19h16" />
             </svg>
         </button>
     </nav>
@@ -35,5 +37,31 @@
         <a href="home.html" class="mobile-menu-link">Simulation</a>
         <a href="home.html" class="mobile-menu-link">Reports</a>
     </div>
+
+
+    <!-- STOCK TABLE -->
+    <table id="stock-table">
+        <thead>
+    <tr >
+      <th scope="col">Symbol</th>
+      <th scope="col">Price</th>
+      <th scope="col">Change</th>
+      <th scope="col">% Change</th>
+      <th scope="col">High</th>
+      <th scope="col">Low</th>
+      <th scope="col">Open</th>
+      <th scope="col">Prev Close</th>
+    </tr>
+    <tr id="stock-table-header">
+      <td colspan="8">Popular Stocks</td>
+    </tr>
+  </thead>
+        <tbody id="stock-table-body">
+
+        </tbody>
+    </table>
+    <script src="scripts/config.js"></script>
+    <script src="scripts/api.js"></script>
+    <script src="scripts/home.js"></script>
 </body>
 </html>

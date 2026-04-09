@@ -44,7 +44,7 @@ async function searchSymbol(search){
 }
 
 //Unfiltered of symbols from specified exchange to populate home page.
-async function symbolList(exchange){
+async function symbolList(exchange = "US"){
     try {
         let result = await fetch(`${config.root}/stock/symbol?exchange=${exchange}&token=${config.key}`);
 
