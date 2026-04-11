@@ -1,11 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <link rel="stylesheet" href="./styles/globals.css">
+    <link rel="stylesheet" href="./styles/reports.css">
 </head>
+
 <body>
     <!-- DESKTOP NAV -->
     <nav id="nav-desktop">
@@ -36,5 +39,58 @@
         <a href="home.html" class="mobile-menu-link">Reports</a>
     </div>
     <script src="./scripts/mobile-nav.js"></script>
+
+
+    <!-- content container-->
+    <div id="content-container">
+
+        <!-- Place html for chart in div below -->
+        <div id="chart-container">
+
+        </div>
+
+
+        <div id="form-reports-container">
+            <div id="stock-reports">
+
+            </div>
+            <form id="form">
+                <div id="buy">
+
+                    <label for="sharesInput"></label>
+                    <input type="number" id="sharesInput" name="shares" placeholder="Shares">
+                    <br>
+
+                    <label for="limitInput"></label>
+                    <input type="number" id="limitInput" name="limit" placeholder="Limit">
+                    <br>
+
+                    <label for="takeProfitInput"></label>
+                    <input type="number" id="takeProfitInput" name="takeProfit" placeholder="Take Profit">
+                    <br>
+
+                    <button type="submit" id="buy-button">Buy</button>
+                </div>
+
+                <div id="sell">
+                    <label for="leverageInput"></label>
+                    <input type="number" id="leverageInput" name="leverage" placeholder="Leverage" >
+                    <br>
+
+                    <!-- what should this field be? -->
+                    <label for="tbd"></label>
+                    <input type="number" id="tbd" name="tbd" placeholder="???">
+                    <br>
+
+                    <label for="stopLossInput"></label>
+                    <input type="number" id="stopLossInput" name="stopLoss" placeholder="Stop Loss">
+                    <br>
+                    <button type="submit" id="sell-button">Sell</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <script src="scripts/reports.js"></script>
 </body>
+
 </html>

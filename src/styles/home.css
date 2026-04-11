@@ -1,0 +1,37 @@
+#stock-table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+}
+
+#stock-table th,
+#stock-table td {
+  padding: 12px 16px;
+  text-align: left;
+}
+
+#stock-table tr {
+  height: 52px;
+}
+
+#stock-table tbody tr:nth-child(odd) {
+  background-color: #ffffff;
+  color: black;
+}
+
+#stock-table tbody tr:nth-child(even) {
+  background-color: #ebebeb;
+  color: black;
+}
+
+#stock-table-header {
+  background-color: #d0e8f5;
+  color: black;
+  text-align: left;
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+#stock-table-header td {
+  padding: 10px 16px;
+}
