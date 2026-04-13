@@ -367,3 +367,47 @@
         width: 100%;
     }
 }
+.chart-filter,
+.watchlist-load,
+.buy-button,
+.sell-button,
+.chatbot-toggle,
+.chatbot-input-row button {
+    transition: transform 0.15s ease, opacity 0.2s ease, box-shadow 0.2s ease;
+}
+
+.chart-filter:hover {
+    transform: translateY(-1px);
+    opacity: 0.96;
+    box-shadow: 0 10px 24px rgba(74, 222, 128, 0.18);
+}
+
+.watchlist-load:hover {
+    transform: translateY(-1px);
+    opacity: 0.96;
+    box-shadow: 0 10px 24px rgba(248, 250, 252, 0.1);
+}
+
+.buy-button:hover {
+    transform: translateY(-1px);
+    opacity: 0.96;
+    box-shadow: 0 10px 24px rgba(183, 241, 191, 0.25);
+}
+
+.sell-button:hover {
+    transform: translateY(-1px);
+    opacity: 0.96;
+    box-shadow: 0 10px 24px rgba(220, 38, 38, 0.25);
+}
+
+.chatbot-toggle:hover {
+    transform: translateY(-1px);
+    opacity: 0.96;
+    box-shadow: 0 10px 24px rgba(147, 197, 253, 0.25);
+}
+
+.chatbot-input-row button:hover {
+    transform: translateY(-1px);
+    opacity: 0.96;
+    box-shadow: 0 10px 24px rgba(74, 222, 128, 0.18);
+}
