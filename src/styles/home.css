@@ -35,3 +35,8 @@
 #stock-table-header td {
   padding: 10px 16px;
 }
+
+.error-msg {
+  text-align: center;
+  margin-top: 2rem;
+}

@@ -9,14 +9,9 @@
   "t": 1582641000 
 }
 */
-async function getQuote(symbol){ 
-    try {
+async function getQuote(symbol){
     let result = await fetch(`${config.root}/quote?symbol=${symbol}&token=${config.key}`);
-
     return result.json();
-    }catch (err) {
-        console.error("Error fetching quote data: ", err);
-    }
 }
 
 //Gets company profile based on ticker
