@@ -1,31 +1,34 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <link rel="stylesheet" href="./styles/globals.css">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>StalkStocks | Simulation</title>
+    <link rel="stylesheet" href="./styles/globals.css" />
+    <link rel="stylesheet" href="./styles/simulation.css" />
 </head>
+
 <body>
     <!-- DESKTOP NAV -->
     <nav id="nav-desktop">
         <a href="index.html" id="logo">StalkStocks</a>
         <div id="nav-desktop-links">
-          <a href="home.html" class="nav-link">Home</a>
-          <a href="simulation.html" class="nav-link">Simulation</a>
-          <a href="reports.html" class="nav-link">Reports</a>
+            <a href="home.html" class="nav-link">Home</a>
+            <a href="simulation.html" class="nav-link">Simulation</a>
+            <a href="reports.html" class="nav-link">Reports</a>
         </div>
     </nav>
 
+    <!-- MOBILE NAV -->
     <nav id="nav-mobile">
         <a href="index.html" id="logo">StalkStocks</a>
         <button id="nav-menu-button" aria-label="Open menu">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" 
-                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" 
-                stroke-linejoin="round" id="nav-menu-svg">
-                <path d="M4 5h16"/>
-                <path d="M4 12h16"/>
-                <path d="M4 19h16"/>
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" id="nav-menu-svg">
+                <path d="M4 5h16" />
+                <path d="M4 12h16" />
+                <path d="M4 19h16" />
             </svg>
         </button>
     </nav>
@@ -36,5 +39,177 @@
         <a href="home.html" class="mobile-menu-link">Reports</a>
     </div>
     <script src="./scripts/mobile-nav.js"></script>
+        <a href="simulation.html" class="mobile-menu-link">Simulation</a>
+        <a href="reports.html" class="mobile-menu-link">Reports</a>
+    </div>
+
+    <main class="simulation-page">
+        <section class="simulation-layout">
+            <!-- LEFT SIDE -->
+            <section class="simulation-left">
+                <article class="chart-card">
+                    <div class="chart-header">
+                        <div>
+                            <p class="eyebrow">Simulation Market View</p>
+                            <h1 id="stock-title">Loading stock...</h1>
+                            <p id="stock-subtitle" class="muted-text">Quote and simulated activity</p>
+                        </div>
+
+                        <div class="price-badge">
+                            <span class="price-label">Live Price</span>
+                            <span id="current-price">$0.00</span>
+                        </div>
+                    </div>
+
+                    <div class="chart-toolbar">
+                        <button class="chart-filter active" type="button" data-range="1D">1D</button>
+                        <button class="chart-filter" type="button" data-range="1W">1W</button>
+                        <button class="chart-filter" type="button" data-range="1M">1M</button>
+                    </div>
+
+                    <div class="chart-area">
+                        <svg id="price-chart" viewBox="0 0 800 320" role="img" aria-label="Stock trend chart">
+                            <rect x="0" y="0" width="800" height="320" rx="14" class="chart-bg"></rect>
+
+                            <line x1="60" y1="50" x2="760" y2="50" class="grid-line"></line>
+                            <line x1="60" y1="120" x2="760" y2="120" class="grid-line"></line>
+                            <line x1="60" y1="190" x2="760" y2="190" class="grid-line"></line>
+                            <line x1="60" y1="260" x2="760" y2="260" class="grid-line"></line>
+
+                            <line x1="60" y1="30" x2="60" y2="260" class="axis-line"></line>
+                            <line x1="60" y1="260" x2="760" y2="260" class="axis-line"></line>
+
+                            <text id="chart-max-label" x="10" y="55" class="chart-label">0</text>
+                            <text id="chart-mid-top-label" x="10" y="125" class="chart-label">0</text>
+                            <text id="chart-mid-bottom-label" x="10" y="195" class="chart-label">0</text>
+                            <text id="chart-min-label" x="10" y="265" class="chart-label">0</text>
+
+                            <text x="70" y="295" class="time-label">10:00 AM</text>
+                            <text x="220" y="295" class="time-label">12:00 PM</text>
+                            <text x="390" y="295" class="time-label">2:00 PM</text>
+                            <text x="560" y="295" class="time-label">4:00 PM</text>
+                            <text x="700" y="295" class="time-label">6:00 PM</text>
+
+                            <polyline id="chart-line" fill="none" stroke-width="4" points=""></polyline>
+                        </svg>
+                    </div>
+                </article>
+
+                <article class="simulation-summary-row">
+                    <div class="summary-card">
+                        <p class="summary-label">Shares Owned</p>
+                        <p id="owned-shares" class="summary-value">0</p>
+                    </div>
+
+                    <div class="summary-card">
+                        <p class="summary-label">Average Cost</p>
+                        <p id="average-cost" class="summary-value">$0.00</p>
+                    </div>
+
+                    <div class="summary-card pnl-card">
+                        <p class="summary-label">Current PnL</p>
+                        <p id="pnl-value" class="summary-value">$0.00</p>
+                    </div>
+                </article>
+
+                <article class="trade-log-card">
+                    <div class="panel-header">
+                        <h2>Recent Trades</h2>
+                        <p class="muted-text">Saved locally in your browser</p>
+                    </div>
+
+                    <div id="trade-log" class="trade-log">
+                        <p class="empty-message">No trades yet for this stock.</p>
+                    </div>
+                </article>
+            </section>
+
+            <!-- RIGHT SIDE -->
+            <aside class="simulation-right">
+                <article class="side-card">
+                    <div class="panel-header">
+                        <h2>Selected Stock</h2>
+                    </div>
+
+                    <div class="selected-stock-box">
+                        <p class="stock-meta-line"><span>Symbol:</span> <strong id="side-symbol">--</strong></p>
+                        <p class="stock-meta-line"><span>Company:</span> <strong id="side-company">--</strong></p>
+                        <p class="stock-meta-line"><span>Open:</span> <strong id="open-price">$0.00</strong></p>
+                        <p class="stock-meta-line"><span>High:</span> <strong id="high-price">$0.00</strong></p>
+                        <p class="stock-meta-line"><span>Low:</span> <strong id="low-price">$0.00</strong></p>
+                        <p class="stock-meta-line"><span>Prev Close:</span> <strong id="prev-close-price">$0.00</strong>
+                        </p>
+                    </div>
+                </article>
+
+                <article class="side-card">
+                    <div class="panel-header">
+                        <h2>Quick Watchlist</h2>
+                        <p class="muted-text">Click a ticker to load it here</p>
+                    </div>
+
+                    <div id="watchlist" class="watchlist"></div>
+                </article>
+
+                <article class="side-card">
+                    <div class="panel-header">
+                        <h2>Execute Trade</h2>
+                    </div>
+
+                    <form id="trade-form" class="trade-form">
+                        <label for="share-input">Shares</label>
+                        <input id="share-input" type="number" min="1" step="1" value="1" />
+
+                        <label for="price-input">Trade Price</label>
+                        <input id="price-input" type="number" min="0" step="0.01" />
+
+                        <div class="trade-buttons">
+                            <button id="buy-button" type="button" class="buy-button">Buy</button>
+                            <button id="sell-button" type="button" class="sell-button">Sell</button>
+                        </div>
+
+                        <p id="trade-status" class="status-text" aria-live="polite"></p>
+                    </form>
+                </article>
+            </aside>
+        </section>
+
+        <!-- CHATBOT -->
+        <button id="chatbot-toggle" class="chatbot-toggle" type="button" aria-expanded="false">
+            ChatBot
+        </button>
+
+        <section id="chatbot-panel" class="chatbot-panel" aria-hidden="true">
+            <div class="chatbot-header">
+                <h2>Stock Help</h2>
+                <button id="chatbot-close" type="button" aria-label="Close chatbot">×</button>
+            </div>
+
+            <div id="chatbot-messages" class="chatbot-messages">
+                <div class="bot-message">
+                    Ask about this stock or the simulator. Try:
+                    <br />
+                    “What does PnL mean?”
+                    <br />
+                    “What happens when I buy more shares?”
+                </div>
+            </div>
+
+            <div class="chatbot-input-row">
+                <label for="chatbot-input" class="sr-only">Type a chatbot question</label>
+                <input id="chatbot-input" type="text" placeholder="Ask a stock question..." />
+                <button id="chatbot-send" type="button">Send</button>
+            </div>
+        </section>
+    </main>
+
+    <footer class="site-footer">
+        <p>StalkStocks © 2026 | Practice trades safely with simulated investing tools.</p>
+    </footer>
+
+    <script src="./scripts/config.js"></script>
+    <script src="./scripts/api.js"></script>
+    <script src="./scripts/simulation.js"></script>
 </body>
+
 </html>
