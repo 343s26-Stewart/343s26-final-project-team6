@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 #stock-table {
   width: 100%;
   border-collapse: collapse;
@@ -34,4 +35,183 @@
 
 #stock-table-header td {
   padding: 10px 16px;
+=======
+.home-page {
+    width: min(1200px, 92%);
+    margin: 0 auto;
+    padding-bottom: 3rem;
+}
+
+.page-header {
+    padding: 2rem 0 1rem;
+}
+
+.page-header h1 {
+    font-size: clamp(2rem, 5vw, 3rem);
+    margin-bottom: 0.5rem;
+}
+
+.page-header p {
+    color: #cbd5e1;
+    max-width: 700px;
+}
+
+.search-panel,
+.stocks-panel {
+    background-color: #0f172a;
+    border: 1px solid #334155;
+    border-radius: 14px;
+    padding: 1.25rem;
+    margin-top: 1.5rem;
+}
+
+.search-row {
+    display: flex;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+}
+
+#stock-search {
+    flex: 1 1 300px;
+    min-width: 220px;
+    padding: 0.9rem 1rem;
+    border-radius: 10px;
+    border: 1px solid #475569;
+    background-color: #1e293b;
+    color: #f8fafc;
+}
+
+#stock-search::placeholder {
+    color: #94a3b8;
+}
+
+#search-button,
+#reset-button {
+    padding: 0.9rem 1.1rem;
+    border-radius: 10px;
+    font-weight: 700;
+    transition: transform 0.15s ease, opacity 0.2s ease;
+}
+
+#search-button {
+    background-color: #4ade80;
+    color: #0f172a;
+}
+
+#reset-button {
+    background-color: #334155;
+    color: #f8fafc;
+}
+
+#search-button:hover,
+#reset-button:hover {
+    transform: translateY(-1px);
+    opacity: 0.95;
+}
+
+.status-text {
+    margin-top: 0.85rem;
+    color: #cbd5e1;
+    min-height: 1.5rem;
+}
+
+.table-header {
+    margin-bottom: 1rem;
+}
+
+.table-header h2 {
+    margin-bottom: 0.3rem;
+}
+
+.table-header p {
+    color: #cbd5e1;
+}
+
+.table-wrapper {
+    overflow-x: auto;
+}
+
+#stocks-table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 900px;
+}
+
+#stocks-table th,
+#stocks-table td {
+    padding: 0.9rem 0.75rem;
+    text-align: left;
+    border-bottom: 1px solid #334155;
+}
+
+#stocks-table th {
+    background-color: #1e293b;
+    color: #f8fafc;
+    font-size: 0.95rem;
+}
+
+#stocks-table td {
+    color: #e2e8f0;
+}
+
+.placeholder-cell {
+    text-align: center;
+    color: #94a3b8;
+    padding: 1.5rem;
+}
+
+.positive-change {
+    color: #4ade80;
+    font-weight: 700;
+}
+
+.negative-change {
+    color: #f87171;
+    font-weight: 700;
+}
+
+.trade-button {
+    background-color: #4ade80;
+    color: #0f172a;
+    font-weight: 700;
+    padding: 0.55rem 0.9rem;
+    border-radius: 8px;
+}
+
+.trade-button:hover {
+    opacity: 0.92;
+}
+
+.site-footer {
+    width: min(1200px, 92%);
+    margin: 0 auto;
+    padding: 2rem 0 2.5rem;
+    color: #94a3b8;
+    text-align: center;
+}
+
+.sr-only {
+    position: absolute;
+    left: -9999px;
+}
+
+@media (max-width: 768px) {
+    .home-page {
+        width: 94%;
+    }
+
+    .search-row {
+        flex-direction: column;
+    }
+
+    #search-button,
+    #reset-button {
+        width: 100%;
+    }
+
+    .search-panel,
+    .stocks-panel {
+        padding: 1rem;
+    }
+>>>>>>> 316f8b341a60e31d87dbfc6d4075afc072256492
 }
