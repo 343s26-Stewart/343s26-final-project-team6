@@ -1,39 +1,101 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <link rel="stylesheet" href="./styles/globals.css">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>StalkStocks | Home</title>
+    <link rel="stylesheet" href="./styles/globals.css" />
+    <link rel="stylesheet" href="./styles/home.css" />
 </head>
+
 <body>
     <!-- DESKTOP NAV -->
     <nav id="nav-desktop">
-        <a href="#" id="logo">StalkStocks</a>
+        <a href="index.html" id="logo">StalkStocks</a>
         <div id="nav-desktop-links">
-          <a href="home.html" class="nav-link">Home</a>
-          <a href="simulation.html" class="nav-link">Simulation</a>
-          <a href="reports.html" class="nav-link">Reports</a>
+            <a href="home.html" class="nav-link">Home</a>
+            <a href="simulation.html" class="nav-link">Simulation</a>
+            <a href="reports.html" class="nav-link">Reports</a>
         </div>
     </nav>
 
+    <!-- MOBILE NAV -->
     <nav id="nav-mobile">
-        <a href="#" id="logo">StalkStocks</a>
+        <a href="index.html" id="logo">StalkStocks</a>
         <button id="nav-menu-button" aria-label="Open menu">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" 
-                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" 
-                stroke-linejoin="round" id="nav-menu-svg">
-                <path d="M4 5h16"/>
-                <path d="M4 12h16"/>
-                <path d="M4 19h16"/>
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" id="nav-menu-svg">
+                <path d="M4 5h16" />
+                <path d="M4 12h16" />
+                <path d="M4 19h16" />
             </svg>
         </button>
     </nav>
 
     <div id="mobile-menu">
         <a href="home.html" class="mobile-menu-link">Home</a>
-        <a href="home.html" class="mobile-menu-link">Simulation</a>
-        <a href="home.html" class="mobile-menu-link">Reports</a>
+        <a href="simulation.html" class="mobile-menu-link">Simulation</a>
+        <a href="reports.html" class="mobile-menu-link">Reports</a>
     </div>
+
+    <main class="home-page">
+        <section class="page-header">
+            <div>
+                <h1>Market Overview</h1>
+                <p>Browse live stock data, search companies, and start a simulated trade.</p>
+            </div>
+        </section>
+
+        <section class="search-panel" aria-label="Stock search">
+            <div class="search-row">
+                <label for="stock-search" class="sr-only">Search by company name or ticker</label>
+                <input type="text" id="stock-search"
+                    placeholder="Search by company name or ticker (example: AAPL or Apple)" />
+                <button id="search-button" type="button">Search</button>
+                <button id="reset-button" type="button">Reset</button>
+            </div>
+            <p id="search-status" class="status-text" aria-live="polite"></p>
+        </section>
+
+        <section class="stocks-panel">
+            <div class="table-header">
+                <h2>Stocks</h2>
+                <p>Click trade to open the simulation page with that stock selected.</p>
+            </div>
+
+            <div class="table-wrapper">
+                <table id="stocks-table">
+                    <thead>
+                        <tr>
+                            <th scope="col">Ticker</th>
+                            <th scope="col">Company</th>
+                            <th scope="col">Current Price</th>
+                            <th scope="col">Open</th>
+                            <th scope="col">High</th>
+                            <th scope="col">Low</th>
+                            <th scope="col">Prev Close</th>
+                            <th scope="col">Change</th>
+                            <th scope="col">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="stocks-table-body">
+                        <tr>
+                            <td colspan="9" class="placeholder-cell">Loading stocks...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </main>
+
+    <footer class="site-footer">
+        <p>StalkStocks © 2026 | Learn investing with live data and safe simulation tools.</p>
+    </footer>
+
+    <script src="./scripts/config.js"></script>
+    <script src="./scripts/api.js"></script>
+    <script src="./scripts/home.js"></script>
 </body>
+
 </html>
