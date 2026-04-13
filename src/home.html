@@ -2,19 +2,11 @@
 <html lang="en">
 
 <head>
-<<<<<<< HEAD
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>StalkStocks - Home</title>
     <link rel="stylesheet" href="./styles/globals.css">
     <link rel="stylesheet" href="./styles/home.css">
-=======
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>StalkStocks | Home</title>
-    <link rel="stylesheet" href="./styles/globals.css" />
-    <link rel="stylesheet" href="./styles/home.css" />
->>>>>>> 316f8b341a60e31d87dbfc6d4075afc072256492
 </head>
 
 <body>
@@ -47,7 +39,6 @@
         <a href="reports.html" class="mobile-menu-link">Reports</a>
     </div>
 
-<<<<<<< HEAD
 
     <!-- STOCK TABLE -->
     <table id="stock-table">
@@ -76,65 +67,3 @@
     <script src="./scripts/mobile-nav.js"></script>
 </body>
 </html>
-=======
-    <main class="home-page">
-        <section class="page-header">
-            <div>
-                <h1>Market Overview</h1>
-                <p>Browse live stock data, search companies, and start a simulated trade.</p>
-            </div>
-        </section>
-
-        <section class="search-panel" aria-label="Stock search">
-            <div class="search-row">
-                <label for="stock-search" class="sr-only">Search by company name or ticker</label>
-                <input type="text" id="stock-search"
-                    placeholder="Search by company name or ticker (example: AAPL or Apple)" />
-                <button id="search-button" type="button">Search</button>
-                <button id="reset-button" type="button">Reset</button>
-            </div>
-            <p id="search-status" class="status-text" aria-live="polite"></p>
-        </section>
-
-        <section class="stocks-panel">
-            <div class="table-header">
-                <h2>Stocks</h2>
-                <p>Click trade to open the simulation page with that stock selected.</p>
-            </div>
-
-            <div class="table-wrapper">
-                <table id="stocks-table">
-                    <thead>
-                        <tr>
-                            <th scope="col">Ticker</th>
-                            <th scope="col">Company</th>
-                            <th scope="col">Current Price</th>
-                            <th scope="col">Open</th>
-                            <th scope="col">High</th>
-                            <th scope="col">Low</th>
-                            <th scope="col">Prev Close</th>
-                            <th scope="col">Change</th>
-                            <th scope="col">Action</th>
-                        </tr>
-                    </thead>
-                    <tbody id="stocks-table-body">
-                        <tr>
-                            <td colspan="9" class="placeholder-cell">Loading stocks...</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </section>
-    </main>
-
-    <footer class="site-footer">
-        <p>StalkStocks © 2026 | Learn investing with live data and safe simulation tools.</p>
-    </footer>
-
-    <script src="./scripts/config.js"></script>
-    <script src="./scripts/api.js"></script>
-    <script src="./scripts/home.js"></script>
-</body>
-
-</html>
->>>>>>> 316f8b341a60e31d87dbfc6d4075afc072256492
