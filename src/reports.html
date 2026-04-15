@@ -4,94 +4,77 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>StalkStocks | Reports</title>
     <link rel="stylesheet" href="./styles/globals.css">
     <link rel="stylesheet" href="./styles/reports.css">
 </head>
 
 <body>
-    <!-- DESKTOP NAV -->
     <nav id="nav-desktop">
         <a href="index.html" id="logo">StalkStocks</a>
         <div id="nav-desktop-links">
-          <a href="home.html" class="nav-link">Home</a>
-          <a href="simulation.html" class="nav-link">Simulation</a>
-          <a href="reports.html" class="nav-link">Reports</a>
+            <a href="home.html" class="nav-link">Home</a>
+            <a href="simulation.html" class="nav-link">Simulation</a>
+            <a href="reports.html" class="nav-link">Reports</a>
         </div>
     </nav>
 
     <nav id="nav-mobile">
         <a href="index.html" id="logo">StalkStocks</a>
         <button id="nav-menu-button" aria-label="Open menu">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" 
-                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" 
-                stroke-linejoin="round" id="nav-menu-svg">
-                <path d="M4 5h16"/>
-                <path d="M4 12h16"/>
-                <path d="M4 19h16"/>
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" id="nav-menu-svg">
+                <path d="M4 5h16" />
+                <path d="M4 12h16" />
+                <path d="M4 19h16" />
             </svg>
         </button>
     </nav>
 
     <div id="mobile-menu">
         <a href="home.html" class="mobile-menu-link">Home</a>
-        <a href="home.html" class="mobile-menu-link">Simulation</a>
-        <a href="home.html" class="mobile-menu-link">Reports</a>
+        <a href="simulation.html" class="mobile-menu-link">Simulation</a>
+        <a href="reports.html" class="mobile-menu-link">Reports</a>
     </div>
-    <script src="./scripts/mobile-nav.js"></script>
 
+    <main class="reports-page">
+        <section class="reports-hero">
+            <p class="reports-kicker">Performance Snapshot</p>
+            <h1>Welcome to the Reports Page.</h1>
+            <p class="reports-subtitle">Here you can see how your favorite stocks and simulated trades have been doing.</p>
+        </section>
 
-    <!-- content container-->
-    <div id="content-container">
-
-        <!-- Place html for chart in div below -->
-        <div id="chart-container">
-
-        </div>
-
-
-        <div id="form-reports-container">
-            <div id="stock-reports">
-
+        <section class="reports-card">
+            <div class="table-heading reports-grid reports-grid-header">
+                <span>Stock Name</span>
+                <span>Past Month Activity</span>
+                <span>24 Hour Change</span>
             </div>
-            <form id="form">
-                <div id="buy">
+            <div id="market-report-table" class="reports-table-body">
+                <p class="reports-status">Loading saved stocks...</p>
+            </div>
+        </section>
 
-                    <label for="sharesInput"></label>
-                    <input type="number" id="sharesInput" name="shares" placeholder="Shares">
-                    <br>
+        <section class="portfolio-summary">
+            <h2>Loss/Gain Per Trade</h2>
+            <p id="total-gain-loss" class="portfolio-total">Total Gain/Loss: $0.00 USD</p>
+        </section>
 
-                    <label for="limitInput"></label>
-                    <input type="number" id="limitInput" name="limit" placeholder="Limit">
-                    <br>
+        <section class="reports-card">
+            <div class="table-heading holdings-grid reports-grid-header">
+                <span>Stock Name</span>
+                <span>Your Loss / Gain</span>
+            </div>
+            <div id="portfolio-report-table" class="reports-table-body">
+                <p class="reports-status">Calculating portfolio performance...</p>
+            </div>
+        </section>
+    </main>
 
-                    <label for="takeProfitInput"></label>
-                    <input type="number" id="takeProfitInput" name="takeProfit" placeholder="Take Profit">
-                    <br>
-
-                    <button type="submit" id="buy-button">Buy</button>
-                </div>
-
-                <div id="sell">
-                    <label for="leverageInput"></label>
-                    <input type="number" id="leverageInput" name="leverage" placeholder="Leverage" >
-                    <br>
-
-                    <!-- what should this field be? -->
-                    <label for="tbd"></label>
-                    <input type="number" id="tbd" name="tbd" placeholder="???">
-                    <br>
-
-                    <label for="stopLossInput"></label>
-                    <input type="number" id="stopLossInput" name="stopLoss" placeholder="Stop Loss">
-                    <br>
-                    <button type="submit" id="sell-button">Sell</button>
-                </div>
-            </form>
-        </div>
-    </div>
-    <script src="scripts/reports.js"></script>
+    <script src="./scripts/config.js"></script>
+    <script src="./scripts/api.js"></script>
     <script src="./scripts/mobile-nav.js"></script>
+    <script src="./scripts/reports.js"></script>
 </body>
 
 </html>
