@@ -14,6 +14,23 @@ class RateLimitError extends Error {
 async function loadHome() {
   const tbody = document.getElementById('stock-table-body');
 
+  // Clear existing content and add loading rows
+  tbody.innerHTML = "";
+  for (const symbol of DEFAULT_SYMBOLS) {
+    const row = document.createElement('tr');
+    row.innerHTML = `
+      <td>${symbol}</td>
+      <td><div class="spinner"></div></td>
+      <td><div class="spinner"></div></td>
+      <td><div class="spinner"></div></td>
+      <td><div class="spinner"></div></td>
+      <td><div class="spinner"></div></td>
+      <td><div class="spinner"></div></td>
+      <td><div class="spinner"></div></td>
+    `;
+    tbody.appendChild(row);
+  }
+
   try {
     const quotes = await Promise.all(
       DEFAULT_SYMBOLS.map(async (symbol) => {
@@ -33,13 +50,13 @@ async function loadHome() {
       const row = document.createElement('tr');
       row.innerHTML = `
         <td>${symbol}</td>
-        <td>${quote.c}</td>
-        <td>${quote.d}</td>
-        <td>${quote.dp}%</td>
-        <td>${quote.h}</td>
-        <td>${quote.l}</td>
-        <td>${quote.o}</td>
-        <td>${quote.pc}</td>
+        <td>${quote.c.toFixed(2)}</td>
+        <td>${quote.d.toFixed(2)}</td>
+        <td>${quote.dp.toFixed(2)}%</td>
+        <td>${quote.h.toFixed(2)}</td>
+        <td>${quote.l.toFixed(2)}</td>
+        <td>${quote.o.toFixed(2)}</td>
+        <td>${quote.pc.toFixed(2)}</td>
       `;
       tbody.appendChild(row);
     }
