@@ -13,39 +13,56 @@ class RateLimitError extends Error {
 
 async function loadHome() {
   const tbody = document.getElementById('stock-table-body');
+  const table = document.getElementById("stock-table");
+
+  if (!tbody) {
+    return;
+  }
+
+  tbody.innerHTML = "";
+
+  DEFAULT_SYMBOLS.forEach((symbol) => {
+    const row = document.createElement('tr');
+    row.dataset.symbol = symbol;
+    row.innerHTML = `
+      <td>${symbol}</td>
+      <td colspan="7" class="loading-cell">
+        <div class="stock-loading">
+          <div class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></div>
+          <span>Loading quote...</span>
+        </div>
+      </td>
+    `;
+    tbody.appendChild(row);
+  });
 
   try {
-    const quotes = await Promise.all(
+    await Promise.all(
       DEFAULT_SYMBOLS.map(async (symbol) => {
         const quote = await getQuote(symbol);
+        const row = tbody.querySelector(`tr[data-symbol="${symbol}"]`);
 
         if (!quote || typeof quote.c !== 'number') {
           throw new RateLimitError('Rate limit reached. Try again in a minute.');
         }
 
-        return { symbol, quote };
+        if (!row) {
+          return;
+        }
+
+        row.innerHTML = `
+          <td>${symbol}</td>
+          <td>${quote.c}</td>
+          <td>${quote.d}</td>
+          <td>${quote.dp}%</td>
+          <td>${quote.h}</td>
+          <td>${quote.l}</td>
+          <td>${quote.o}</td>
+          <td>${quote.pc}</td>
+        `;
       })
     );
-
-    tbody.innerHTML = "";
-
-    for (const { symbol, quote } of quotes) {
-      const row = document.createElement('tr');
-      row.innerHTML = `
-        <td>${symbol}</td>
-        <td>${quote.c}</td>
-        <td>${quote.d}</td>
-        <td>${quote.dp}%</td>
-        <td>${quote.h}</td>
-        <td>${quote.l}</td>
-        <td>${quote.o}</td>
-        <td>${quote.pc}</td>
-      `;
-      tbody.appendChild(row);
-    }
-
   } catch (err) {
-    const table = document.getElementById("stock-table");
     const errorMessage = document.createElement('p');
 
     if (err.name === "RateLimitError") {
