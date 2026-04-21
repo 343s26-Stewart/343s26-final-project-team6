@@ -6,7 +6,7 @@ This is a client-side web application for a university course project.
 
 - **Vanilla only.** Use plain HTML, CSS, and JavaScript. Do not use frameworks (React, Vue, Svelte, Angular, etc.). Client-side libraries like Chart.js or Grid.js are permitted.
 - **No build tools.** No bundlers, transpilers, or package managers (no npm, no Webpack, no Vite). The app must run directly in the browser from static files.
-- **Data persistence.** Use `localStorage` (or OPFS) to save and retrieve user data. Do not use a backend database.
+- **Data persistence.** Use `localStorage` to save and retrieve user data. Do not use a backend database.
 - **Data export and import.** Support exporting data as a downloadable JSON file and importing data from a JSON file.
 - **Third-party API.** Integrate with at least one public third-party API using `fetch`. Do not use server-side proxies.
 - **Responsive design.** The layout must work on screens 320px wide and larger. Use CSS media queries or flexible layouts.
