@@ -1,5 +1,4 @@
 document.addEventListener("DOMContentLoaded", () => {
-    // Run all page setup steps only after the HTML is fully loaded.
     setupMobileMenu();
     setupChartFilterButtons();
     setupTradeButtons();
@@ -14,7 +13,6 @@ let currentCompany = "Apple Inc";
 let currentQuote = null;
 let currentChartRange = "1D";
 
-// Shows/hides the mobile navigation menu when the menu button is clicked.
 function setupMobileMenu() {
     const navButton = document.querySelector("#nav-menu-button");
     const mobileMenu = document.querySelector("#mobile-menu");
@@ -28,7 +26,6 @@ function setupMobileMenu() {
     });
 }
 
-// Lets the user switch chart time ranges (1D, 1W, 1M) and redraws the chart.
 function setupChartFilterButtons() {
     const buttons = document.querySelectorAll(".chart-filter");
 
@@ -44,7 +41,6 @@ function setupChartFilterButtons() {
     });
 }
 
-// Connects the Buy and Sell buttons to the trading logic.
 function setupTradeButtons() {
     const buyButton = document.querySelector("#buy-button");
     const sellButton = document.querySelector("#sell-button");
@@ -61,7 +57,6 @@ function updateTradeTotal() {
     document.querySelector("#trade-total").textContent = formatCurrency(shares * price);
 }
 
-// Sets up open/close/send behavior for the help chatbot panel.
 function setupChatbot() {
     const chatbotToggle = document.querySelector("#chatbot-toggle");
     const chatbotPanel = document.querySelector("#chatbot-panel");
@@ -90,7 +85,6 @@ function setupChatbot() {
     });
 }
 
-// Loads the starting stock from URL parameters, then builds the watchlist.
 async function initializeSimulationPage() {
     const params = new URLSearchParams(window.location.search);
     currentSymbol = params.get("symbol") || "AAPL";
@@ -100,7 +94,6 @@ async function initializeSimulationPage() {
     await renderWatchlist();
 }
 
-// Fetches quote/profile data for a stock and refreshes all related UI sections.
 async function loadStockData(symbol, companyName = symbol) {
     setTradeStatus("Loading stock data...");
 
@@ -134,7 +127,6 @@ async function loadStockData(symbol, companyName = symbol) {
     }
 }
 
-// Updates text fields on the page with the latest stock info and quote values.
 function updatePageStockInfo() {
     document.querySelector("#stock-title").textContent = `${currentCompany} (${currentSymbol})`;
     document.querySelector("#stock-subtitle").textContent = "Quote and simulated activity";
@@ -150,7 +142,6 @@ function updatePageStockInfo() {
     updateTradeTotal();
 }
 
-// Draws an SVG line chart from generated price points and updates y-axis labels.
 function drawChart(basePrice, range) {
     const chartLine = document.querySelector("#chart-line");
     const points = generateTrendData(basePrice, range);
@@ -164,7 +155,6 @@ function drawChart(basePrice, range) {
     const chartHeight = chartBottom - chartTop;
     const chartWidth = chartRight - chartLeft;
 
-    // Convert each price point into x/y coordinates for the SVG polyline.
     const pointString = points
         .map((price, index) => {
             const x = chartLeft + (index / (points.length - 1)) * chartWidth;
@@ -186,7 +176,6 @@ function drawChart(basePrice, range) {
     document.querySelector("#chart-min-label").textContent = min.toFixed(2);
 }
 
-// Creates simulated price data by applying small random up/down movements.
 function generateTrendData(basePrice, range) {
     const counts = {
         "1D": 28,
@@ -206,7 +195,6 @@ function generateTrendData(basePrice, range) {
 
     let currentValue = Number(basePrice);
 
-    // This loop creates a simple "random walk" to imitate market movement.
     for (let i = 0; i < totalPoints; i += 1) {
         const drift = (Math.random() - 0.5) * movementSize;
         currentValue = Math.max(1, currentValue + drift);
@@ -216,7 +204,6 @@ function generateTrendData(basePrice, range) {
     return points;
 }
 
-// Builds the watchlist panel by fetching quote/profile data for default symbols.
 async function renderWatchlist() {
     const watchlistContainer = document.querySelector("#watchlist");
     watchlistContainer.innerHTML = `<p class="empty-message">Loading watchlist...</p>`;
@@ -271,7 +258,6 @@ async function renderWatchlist() {
     });
 }
 
-// Handles buy/sell actions, validates input, updates holdings, and saves to storage.
 function executeTrade(type) {
     const shareInput = document.querySelector("#share-input");
 
@@ -289,7 +275,6 @@ function executeTrade(type) {
     }
 
     const portfolio = getPortfolio();
-    // Create a default empty position if this stock has not been traded yet.
     const existingPosition = portfolio[currentSymbol] || {
         symbol: currentSymbol,
         company: currentCompany,
@@ -298,7 +283,6 @@ function executeTrade(type) {
     };
 
     if (type === "buy") {
-        // Weighted-average formula: total cost / total shares.
         const currentCostBasis = existingPosition.shares * existingPosition.averageCost;
         const additionalCost = shares * tradePrice;
         const newShareTotal = existingPosition.shares + shares;
@@ -319,7 +303,6 @@ function executeTrade(type) {
         }
     }
 
-    // Add newest trade to the front so recent activity appears first in the log.
     existingPosition.company = currentCompany;
     portfolio[currentSymbol] = existingPosition;
     savePortfolio(portfolio);
@@ -332,7 +315,6 @@ function executeTrade(type) {
     );
 }
 
-// Recomputes position stats (shares, average cost, and unrealized PnL) for current stock.
 function updatePortfolioSummary() {
     const portfolio = getPortfolio();
     const position = portfolio[currentSymbol] || { shares: 0, averageCost: 0 };
@@ -353,7 +335,6 @@ function updatePortfolioSummary() {
     }
 }
 
-// Renders up to 6 most recent trades for the selected stock.
 function renderTradeLog() {
     const tradeLog = document.querySelector("#trade-log");
     const trades = getTransactions().filter(t => t.symbol === currentSymbol).reverse().slice(0, 6);
@@ -381,7 +362,6 @@ function renderTradeLog() {
     });
 }
 
-// Adds the user's chat message and a simple bot response to the chat panel.
 function sendChatMessage() {
     const input = document.querySelector("#chatbot-input");
     const messages = document.querySelector("#chatbot-messages");
@@ -405,7 +385,6 @@ function sendChatMessage() {
     messages.scrollTop = messages.scrollHeight;
 }
 
-// Returns a canned educational reply based on keywords in the user's question.
 function buildBotReply(userText) {
     const question = userText.toLowerCase();
 
@@ -428,23 +407,10 @@ function buildBotReply(userText) {
     return `This simulator is showing ${currentSymbol} at ${formatCurrency(currentQuote?.c || 0)}. You can buy or sell shares and track your simulated PnL.`;
 }
 
-// Reads saved portfolio data from localStorage.
-function getPortfolio() {
-    const saved = localStorage.getItem(PORTFOLIO_KEY);
-    return saved ? JSON.parse(saved) : {};
-}
-
-// Writes portfolio data to localStorage so trades persist across reloads.
-function savePortfolio(portfolio) {
-    localStorage.setItem(PORTFOLIO_KEY, JSON.stringify(portfolio));
-}
-
-// Formats a number as a dollar value with two decimals.
 function formatCurrency(value) {
     return `$${Number(value || 0).toFixed(2)}`;
 }
 
-// Shows status/feedback text under the trading controls.
 function setTradeStatus(message) {
     document.querySelector("#trade-status").textContent = message;
 }
