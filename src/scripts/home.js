@@ -1,3 +1,4 @@
+// 10 default stocks to display on home page.
 const DEFAULT_SYMBOLS = [
   "AAPL", "GOOGL", "MSFT", "AMZN", "META",
   "TSLA", "NVDA", "JPM", "V", "JNJ"
@@ -11,14 +12,27 @@ class RateLimitError extends Error {
   }
 }
 
+
+// Upon favorite button click, add class to change styling of button
+function updateFavoriteIcon(button, isFavorite) {
+  if (isFavorite) {
+    button.classList.add("favorited");
+  } else {
+    button.classList.remove("favorited");
+  }
+}
+
 async function loadHome() {
   const tbody = document.getElementById('stock-table-body');
 
+  //Populates quotes var with stock price information
   try {
     const quotes = await Promise.all(
       DEFAULT_SYMBOLS.map(async (symbol) => {
+        // Get quote calls Finnhub API for pricing info
         const quote = await getQuote(symbol);
 
+        //Rate limit check
         if (!quote || typeof quote.c !== 'number') {
           throw new RateLimitError('Rate limit reached. Try again in a minute.');
         }
@@ -29,21 +43,34 @@ async function loadHome() {
 
     tbody.innerHTML = "";
 
+    //Populate HTML table with stock information
     for (const { symbol, quote } of quotes) {
       const row = document.createElement('tr');
       row.innerHTML = `
         <td>${symbol}</td>
-        <td>${quote.c}</td>
-        <td>${quote.d}</td>
-        <td>${quote.dp}%</td>
-        <td>${quote.h}</td>
-        <td>${quote.l}</td>
-        <td>${quote.o}</td>
-        <td>${quote.pc}</td>
+        <td>${quote.c.toFixed(2)}</td>
+        <td>${quote.d.toFixed(2)}</td>
+        <td>${quote.dp.toFixed(2)}%</td>
+        <td>${quote.h.toFixed(2)}</td>
+        <td>${quote.l.toFixed(2)}</td>
+        <td>${quote.o.toFixed(2)}</td>
+        <td>${quote.pc.toFixed(2)}</td>
+        <td><button class="fav-btn">Favorite</button></td>
       `;
+
+      const favBtn = row.querySelector(".fav-btn");
+      //Check if stock is a favorite and update button style accordingly
+      updateFavoriteIcon(favBtn, getFavorites().includes(symbol));
+
+      //If click toggle favorite button style and add to localStorage.
+      favBtn.addEventListener("click", () => {
+        toggleFavorite(symbol);
+        updateFavoriteIcon(favBtn, getFavorites().includes(symbol));
+      });
+
       tbody.appendChild(row);
     }
-
+//Error checking
   } catch (err) {
     const table = document.getElementById("stock-table");
     const errorMessage = document.createElement('p');
