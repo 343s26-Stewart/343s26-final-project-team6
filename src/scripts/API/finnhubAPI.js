@@ -10,7 +10,7 @@
 }
 */
 async function getQuote(symbol){
-    let result = await fetch(`${config.root}/quote?symbol=${symbol}&token=${config.key}`);
+    let result = await fetch(`${config.finnhubRoot}/quote?symbol=${symbol}&token=${config.finnhubKey}`);
     return result.json();
 }
 
@@ -18,7 +18,7 @@ async function getQuote(symbol){
 //{country, currency, exchange, ipo, ...., ticker, full name, weburl, logo, industry}
 async function getProfile(symbol){
     try {
-    let result = await fetch(`${config.root}/stock/profile2?symbol=${symbol}&token=${config.key}`);
+    let result = await fetch(`${config.finnhubRoot}/stock/profile2?symbol=${symbol}&token=${config.finnhubKey}`);
 
     return result.json();
     } catch (err) {
@@ -30,7 +30,7 @@ async function getProfile(symbol){
 
 async function searchSymbol(search){
     try {
-    let result = await fetch(`${config.root}/search?q=${search}&token=${config.key}`);
+    let result = await fetch(`${config.finnhubRoot}/search?q=${search}&token=${config.finnhubKey}`);
 
     return result.json();
     } catch(err) {
@@ -41,7 +41,7 @@ async function searchSymbol(search){
 //Unfiltered of symbols from specified exchange to populate home page.
 async function symbolList(exchange = "US"){
     try {
-        let result = await fetch(`${config.root}/stock/symbol?exchange=${exchange}&token=${config.key}`);
+        let result = await fetch(`${config.finnhubRoot}/stock/symbol?exchange=${exchange}&token=${config.finnhubKey}`);
 
         return result;
     } catch (err) {
