@@ -25,6 +25,23 @@ function updateFavoriteIcon(button, isFavorite) {
 async function loadHome() {
   const tbody = document.getElementById('stock-table-body');
 
+  // Clear existing content and add loading rows
+  tbody.innerHTML = "";
+  for (const symbol of DEFAULT_SYMBOLS) {
+    const row = document.createElement('tr');
+    row.innerHTML = `
+      <td>${symbol}</td>
+      <td><div class="spinner"></div></td>
+      <td><div class="spinner"></div></td>
+      <td><div class="spinner"></div></td>
+      <td><div class="spinner"></div></td>
+      <td><div class="spinner"></div></td>
+      <td><div class="spinner"></div></td>
+      <td><div class="spinner"></div></td>
+    `;
+    tbody.appendChild(row);
+  }
+
   //Populates quotes var with stock price information
   try {
     const quotes = await Promise.all(
