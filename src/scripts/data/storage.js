@@ -47,3 +47,23 @@ function newTransaction(symbol, type, shares, price) {
     transactions.push({ symbol, type, shares, price, date: new Date().toISOString() });
     localStorage.setItem("transactions", JSON.stringify(transactions));
 }
+
+
+//returns localStorage portfolio as an object keyed by symbol
+function getPortfolio() {
+    try {
+        const saved = localStorage.getItem("portfolio");
+        if (saved === null) {
+            return {};
+        }
+        return JSON.parse(saved);
+    } catch {
+        console.log("error getting portfolio");
+        return {};
+    }
+}
+
+//saves portfolio object to localStorage
+function savePortfolio(portfolio) {
+    localStorage.setItem("portfolio", JSON.stringify(portfolio));
+}

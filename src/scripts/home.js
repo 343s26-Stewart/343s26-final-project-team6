@@ -38,6 +38,7 @@ async function loadHome() {
       <td><div class="spinner"></div></td>
       <td><div class="spinner"></div></td>
       <td><div class="spinner"></div></td>
+      <td><div class="spinner"></div></td>
     `;
     tbody.appendChild(row);
   }
