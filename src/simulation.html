@@ -158,8 +158,8 @@
                         <label for="share-input">Shares</label>
                         <input id="share-input" type="number" min="1" step="1" value="1" />
 
-                        <label for="price-input">Trade Price</label>
-                        <input id="price-input" type="number" min="0" step="0.01" />
+                        <label>Total Cost</label>
+                        <div id="trade-total" class="trade-total">$0.00</div>
 
                         <div class="trade-buttons">
                             <button id="buy-button" type="button" class="buy-button">Buy</button>
@@ -173,8 +173,9 @@
         </section>
 
         <!-- CHATBOT -->
-        <button id="chatbot-toggle" class="chatbot-toggle" type="button" aria-expanded="false">
-            ChatBot
+        <button id="chatbot-toggle" class="chatbot-toggle" type="button" aria-expanded="false" aria-label="Open chatbot">
+            <img src="assets/chatbot.jpeg" alt="Chatbot" class="chatbot-icon" />
+            <span class="sr-only">Open chatbot</span>
         </button>
 
         <section id="chatbot-panel" class="chatbot-panel" aria-hidden="true">
@@ -207,6 +208,7 @@
 
     <script src="./scripts/config.js"></script>
     <script src="./scripts/api.js"></script>
+    <script src="./scripts/data/storage.js"></script>
     <script src="./scripts/simulation.js"></script>
 </body>
 

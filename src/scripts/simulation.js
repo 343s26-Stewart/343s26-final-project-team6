@@ -8,7 +8,6 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 const DEFAULT_WATCHLIST = ["AAPL", "MSFT", "NVDA", "TSLA"];
-const PORTFOLIO_KEY = "stalkstocks_portfolio";
 
 let currentSymbol = "AAPL";
 let currentCompany = "Apple Inc";
@@ -49,9 +48,17 @@ function setupChartFilterButtons() {
 function setupTradeButtons() {
     const buyButton = document.querySelector("#buy-button");
     const sellButton = document.querySelector("#sell-button");
+    const shareInput = document.querySelector("#share-input");
 
     buyButton.addEventListener("click", () => executeTrade("buy"));
     sellButton.addEventListener("click", () => executeTrade("sell"));
+    shareInput.addEventListener("input", updateTradeTotal);
+}
+
+function updateTradeTotal() {
+    const shares = Number(document.querySelector("#share-input").value) || 0;
+    const price = currentQuote?.c || 0;
+    document.querySelector("#trade-total").textContent = formatCurrency(shares * price);
 }
 
 // Sets up open/close/send behavior for the help chatbot panel.
@@ -140,7 +147,7 @@ function updatePageStockInfo() {
     document.querySelector("#low-price").textContent = formatCurrency(currentQuote.l);
     document.querySelector("#prev-close-price").textContent = formatCurrency(currentQuote.pc);
 
-    document.querySelector("#price-input").value = Number(currentQuote.c).toFixed(2);
+    updateTradeTotal();
 }
 
 // Draws an SVG line chart from generated price points and updates y-axis labels.
@@ -267,10 +274,9 @@ async function renderWatchlist() {
 // Handles buy/sell actions, validates input, updates holdings, and saves to storage.
 function executeTrade(type) {
     const shareInput = document.querySelector("#share-input");
-    const priceInput = document.querySelector("#price-input");
 
     const shares = Number(shareInput.value);
-    const tradePrice = Number(priceInput.value);
+    const tradePrice = currentQuote?.c;
 
     if (!shares || shares <= 0) {
         setTradeStatus("Enter a valid number of shares.");
@@ -278,7 +284,7 @@ function executeTrade(type) {
     }
 
     if (!tradePrice || tradePrice <= 0) {
-        setTradeStatus("Enter a valid trade price.");
+        setTradeStatus("No market price available.");
         return;
     }
 
@@ -288,8 +294,7 @@ function executeTrade(type) {
         symbol: currentSymbol,
         company: currentCompany,
         shares: 0,
-        averageCost: 0,
-        trades: []
+        averageCost: 0
     };
 
     if (type === "buy") {
@@ -316,15 +321,9 @@ function executeTrade(type) {
 
     // Add newest trade to the front so recent activity appears first in the log.
     existingPosition.company = currentCompany;
-    existingPosition.trades.unshift({
-        type,
-        shares,
-        price: tradePrice,
-        date: new Date().toLocaleString()
-    });
-
     portfolio[currentSymbol] = existingPosition;
     savePortfolio(portfolio);
+    newTransaction(currentSymbol, type, shares, tradePrice);
 
     updatePortfolioSummary();
     renderTradeLog();
@@ -336,11 +335,7 @@ function executeTrade(type) {
 // Recomputes position stats (shares, average cost, and unrealized PnL) for current stock.
 function updatePortfolioSummary() {
     const portfolio = getPortfolio();
-    const position = portfolio[currentSymbol] || {
-        shares: 0,
-        averageCost: 0,
-        trades: []
-    };
+    const position = portfolio[currentSymbol] || { shares: 0, averageCost: 0 };
 
     document.querySelector("#owned-shares").textContent = position.shares;
     document.querySelector("#average-cost").textContent = formatCurrency(position.averageCost || 0);
@@ -361,17 +356,16 @@ function updatePortfolioSummary() {
 // Renders up to 6 most recent trades for the selected stock.
 function renderTradeLog() {
     const tradeLog = document.querySelector("#trade-log");
-    const portfolio = getPortfolio();
-    const position = portfolio[currentSymbol];
+    const trades = getTransactions().filter(t => t.symbol === currentSymbol).reverse().slice(0, 6);
 
-    if (!position || !position.trades || position.trades.length === 0) {
+    if (trades.length === 0) {
         tradeLog.innerHTML = `<p class="empty-message">No trades yet for this stock.</p>`;
         return;
     }
 
     tradeLog.innerHTML = "";
 
-    position.trades.slice(0, 6).forEach((trade) => {
+    trades.forEach((trade) => {
         const item = document.createElement("div");
         item.className = "trade-log-item";
 
@@ -380,7 +374,7 @@ function renderTradeLog() {
         <strong>${trade.type.toUpperCase()} ${trade.shares} share${trade.shares === 1 ? "" : "s"}</strong>
         <span>${formatCurrency(trade.price)} each</span>
       </div>
-      <div class="trade-log-right">${trade.date}</div>
+      <div class="trade-log-right">${new Date(trade.date).toLocaleString()}</div>
     `;
 
         tradeLog.appendChild(item);
