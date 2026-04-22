@@ -1,22 +1,17 @@
-const PORTFOLIO_KEY = "stalkstocks_portfolio";
-const REPORT_FALLBACKS = [
-    { symbol: "AAPL", company: "Apple" },
-    { symbol: "DIS", company: "Disney" }
-];
+const FAVORITES_KEY = "favorites";
+const PORTFOLIO_KEY = "portfolio";
 
 document.addEventListener("DOMContentLoaded", () => {
     initializeReportsPage();
 });
 
 async function initializeReportsPage() {
+    const savedFavorites = getFavorites();
     const portfolio = getPortfolio();
-    const savedSymbols = Object.keys(portfolio);
-    const stocksToRender = savedSymbols.length > 0
-        ? savedSymbols.map((symbol) => ({
-            symbol,
-            company: portfolio[symbol]?.company || symbol
-        }))
-        : REPORT_FALLBACKS;
+    const stocksToRender = savedFavorites.map((symbol) => ({
+        symbol,
+        company: portfolio[symbol]?.company || symbol
+    }));
 
     const marketTable = document.querySelector("#market-report-table");
     const portfolioTable = document.querySelector("#portfolio-report-table");
@@ -43,7 +38,7 @@ async function buildStockReport(stock, portfolioEntry) {
         company: stock.company || stock.symbol,
         currentPrice: fallbackBasePrice,
         change24h: 0,
-        history: generateTrendData(fallbackBasePrice, portfolioEntry ? "portfolio" : "watchlist"),
+        history: createFallbackTrendData(fallbackBasePrice),
         shares: portfolioEntry?.shares || 0,
         averageCost: portfolioEntry?.averageCost || 0,
         gainLoss: 0
@@ -62,7 +57,7 @@ async function buildStockReport(stock, portfolioEntry) {
         if (quote && typeof quote.c === "number" && quote.c > 0) {
             report.currentPrice = quote.c;
             report.change24h = typeof quote.d === "number" ? quote.d : quote.c - (quote.pc || quote.c);
-            report.history = generateTrendData(quote.c, portfolioEntry ? "portfolio" : "watchlist");
+            report.history = buildTrendDataFromQuote(quote);
         }
     } catch (error) {
         console.error(`Failed to fetch report data for ${stock.symbol}:`, error);
@@ -167,33 +162,101 @@ function createSparklineSVG(points, symbol, index) {
             <rect class="spark-bg" x="0" y="0" width="${width}" height="${height}" rx="8"></rect>
             <line class="spark-grid" x1="${padding.left}" y1="${baselineOne}" x2="${width - padding.right}" y2="${baselineOne}"></line>
             <line class="spark-grid" x1="${padding.left}" y1="${baselineTwo}" x2="${width - padding.right}" y2="${baselineTwo}"></line>
-            <text class="spark-label" x="${padding.left}" y="${height - 8}">9:30 AM</text>
-            <text class="spark-label" x="${width / 2 - 18}" y="${height - 8}">1:00 PM</text>
-            <text class="spark-label" x="${width - 66}" y="${height - 8}">4:00 PM</text>
+            <text class="spark-label" x="${padding.left}" y="${height - 8}">Prev Close</text>
+            <text class="spark-label" x="${width / 2 - 18}" y="${height - 8}">Session</text>
+            <text class="spark-label" x="${width - 48}" y="${height - 8}">Now</text>
             <polyline class="spark-line" stroke="${lineColor}" points="${polylinePoints}"></polyline>
         </svg>
     `;
 }
 
-function generateTrendData(basePrice, profileType) {
-    const pointCount = profileType === "portfolio" ? 26 : 22;
-    const volatility = profileType === "portfolio" ? 4.4 : 3.2;
-    const points = [];
-    let currentValue = Number(basePrice) || 100;
+function buildTrendDataFromQuote(quote) {
+    const previousClose = getValidPrice(quote.pc, quote.c);
+    const open = getValidPrice(quote.o, previousClose);
+    const high = getValidPrice(quote.h, Math.max(open, quote.c || open));
+    const low = getValidPrice(quote.l, Math.min(open, quote.c || open));
+    const current = getValidPrice(quote.c, open);
 
-    for (let index = 0; index < pointCount; index += 1) {
-        const wave = Math.sin(index / 2.8) * (volatility * 0.3);
-        const drift = (Math.random() - 0.5) * volatility;
-        currentValue = Math.max(1, currentValue + wave + drift);
-        points.push(Number(currentValue.toFixed(2)));
+    const anchorPoints = [previousClose, open];
+    const firstSwing = current >= open ? low : high;
+    const secondSwing = current >= open ? high : low;
+
+    anchorPoints.push(firstSwing);
+
+    if (secondSwing !== firstSwing) {
+        anchorPoints.push(secondSwing);
+    }
+
+    anchorPoints.push(current);
+
+    return interpolateTrendPoints(anchorPoints, 25);
+}
+
+function interpolateTrendPoints(anchorPoints, totalPoints) {
+    if (anchorPoints.length === 1) {
+        return Array.from({ length: totalPoints }, () => anchorPoints[0]);
+    }
+
+    const points = [];
+
+    for (let index = 0; index < totalPoints; index += 1) {
+        const progress = (index / (totalPoints - 1)) * (anchorPoints.length - 1);
+        const leftIndex = Math.floor(progress);
+        const rightIndex = Math.min(anchorPoints.length - 1, leftIndex + 1);
+        const segmentProgress = progress - leftIndex;
+        const leftValue = anchorPoints[leftIndex];
+        const rightValue = anchorPoints[rightIndex];
+        const value = leftValue + ((rightValue - leftValue) * segmentProgress);
+
+        points.push(Number(value.toFixed(2)));
     }
 
     return points;
 }
 
+function createFallbackTrendData(basePrice) {
+    const safeBasePrice = getValidPrice(basePrice, 100);
+    return interpolateTrendPoints([safeBasePrice, safeBasePrice], 25);
+}
+
+function getValidPrice(value, fallback) {
+    const amount = Number(value);
+    if (Number.isFinite(amount) && amount > 0) {
+        return amount;
+    }
+
+    return Number(fallback) || 100;
+}
+
 function getPortfolio() {
-    const saved = localStorage.getItem(PORTFOLIO_KEY);
-    return saved ? JSON.parse(saved) : {};
+    try {
+        const saved = localStorage.getItem(PORTFOLIO_KEY);
+        return saved ? JSON.parse(saved) : {};
+    } catch (error) {
+        console.error("Could not read saved portfolio:", error);
+        return {};
+    }
+}
+
+function getFavorites() {
+    try {
+        const saved = localStorage.getItem(FAVORITES_KEY);
+        if (!saved) {
+            return [];
+        }
+
+        const parsed = JSON.parse(saved);
+        if (!Array.isArray(parsed)) {
+            return [];
+        }
+
+        return parsed
+            .map((symbol) => String(symbol).trim().toUpperCase())
+            .filter(Boolean);
+    } catch (error) {
+        console.error("Could not read saved favorites:", error);
+        return [];
+    }
 }
 
 function formatSignedCurrency(value) {
