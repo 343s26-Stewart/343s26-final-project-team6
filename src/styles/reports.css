@@ -1,80 +1,274 @@
 :root {
-    --navy-blue: rgb(29, 41, 59);
-    --neon-green: rgb(93, 218, 127);
+    --reports-navy: #1d293b;
+    --reports-panel: #2d3440;
+    --reports-header: #1f4f64;
+    --reports-row-alt: #0b3f0d;
+    --reports-border: rgba(201, 214, 229, 0.35);
+    --reports-text-soft: #cbd5e1;
+    --reports-positive: #d6ffe0;
+    --reports-negative: #ffd6d6;
 }
 
-#content-container {
-    display: flex;
-    flex-direction: row;
-    height: 90vh;
-    width: 100%;
+.reports-page {
+    width: min(96%, 1180px);
+    margin: 0 auto;
+    padding: 1rem 0 3rem;
 }
 
-#chart-container {
-    height: 100%;
-    width: 70%;
-    border: 3px solid white;
+.reports-hero {
+    border-top: 1px solid var(--reports-border);
+    border-bottom: 1px solid var(--reports-border);
+    text-align: center;
+    padding: 1.5rem 1rem;
+    margin-bottom: 1.75rem;
 }
 
-#form-reports-container {
-    height: 100%;
-    width: 30%;
-    border: 3px solid white;
+.reports-kicker {
+    color: #8be19d;
+    font-size: 0.85rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-bottom: 0.25rem;
+}
+
+.reports-hero h1 {
+    font-size: clamp(1.8rem, 3vw, 2.5rem);
+    margin-bottom: 0.45rem;
+}
+
+.reports-subtitle {
+    color: var(--reports-text-soft);
+    max-width: 620px;
+    margin: 0 auto;
+}
+
+.reports-card {
+    background-color: var(--reports-panel);
+    border: 1px solid var(--reports-border);
+    margin-bottom: 1.75rem;
+}
+
+.reports-grid,
+.holdings-grid {
+    display: grid;
+    align-items: stretch;
+}
+
+.reports-grid {
+    grid-template-columns: minmax(170px, 1.1fr) minmax(300px, 2.2fr) minmax(130px, 1fr);
+}
+
+.holdings-grid {
+    grid-template-columns: 1fr 1fr;
+}
+
+.table-heading {
+    background-color: var(--reports-header);
+    color: #f8fafc;
+    font-size: 1.55rem;
+    font-weight: 700;
+    text-align: center;
+}
+
+.table-heading span {
+    padding: 1rem;
+    border-right: 1px solid var(--reports-border);
+}
+
+.table-heading span:last-child {
+    border-right: none;
+}
+
+.reports-table-body {
     display: flex;
     flex-direction: column;
 }
 
-/* top half = reports */
-#stock-reports {
-    height: 50%;
-    border: 3px solid red;
+.report-row,
+.holding-row {
+    border-top: 1px solid var(--reports-border);
 }
 
-/* form takes bottom half */
-#form-reports-container form {
-    height: 50%;
-    display: flex;
-    flex-direction: row; /* puts buy and sell side-by-side */
+.report-row:nth-child(even) {
+    background-color: var(--reports-row-alt);
 }
 
-/* each side */
-#buy, #sell {
-    width: 50%;
+.report-row:nth-child(odd),
+.holding-row {
+    background-color: rgba(18, 30, 49, 0.82);
+}
+
+.report-cell,
+.holding-cell {
+    padding: 1.35rem 1rem;
     display: flex;
-    flex-direction: column;
     align-items: center;
     justify-content: center;
-    border: 2px solid green;
+    border-right: 1px solid var(--reports-border);
+    min-height: 154px;
 }
 
-form input {
-    width: 70%;
-    height: 2.5rem;
-    margin-left: auto;
-    margin-right: auto;
+.holding-cell {
+    min-height: 98px;
+}
+
+.report-cell:last-child,
+.holding-cell:last-child {
+    border-right: none;
+}
+
+.stock-name-block {
     text-align: center;
-    font-size: 1rem;
-    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
 }
 
-#buy-button {
-    background-color: rgb(31, 47, 31);
-    width: 70%;
-    height: 3rem;
-    margin-left: auto;
-    margin-right: auto;
-    border: 3px rgb(65, 111, 38) solid;
-    border-radius: 10px;
-    color: rgba(255, 255, 255, 0.77);
+.stock-company {
+    font-size: 1.45rem;
+    font-weight: 700;
 }
 
-#sell-button {
-    background-color: rgb(153, 0, 0);
-    width: 70%;
-    height: 3rem;
-    margin-left: auto;
-    margin-right: auto;
-    border: 3px rgb(255, 170, 165) solid;
-    border-radius: 10px;
-    color: rgba(255, 255, 255, 0.77);
+.stock-symbol {
+    font-size: 1.6rem;
+    font-weight: 700;
+}
+
+.chart-shell {
+    width: min(100%, 430px);
+}
+
+.spark-chart {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+.spark-bg {
+    fill: #1a1d26;
+}
+
+.spark-grid {
+    stroke: rgba(148, 163, 184, 0.3);
+    stroke-width: 1;
+    stroke-dasharray: 4 5;
+}
+
+.spark-label {
+    fill: #94a3b8;
+    font-size: 13px;
+}
+
+.spark-line {
+    fill: none;
+    stroke-width: 3;
+}
+
+.change-value {
+    font-size: 2rem;
+    font-weight: 700;
+}
+
+.change-positive,
+.gain-positive {
+    color: var(--reports-positive);
+}
+
+.change-negative,
+.gain-negative {
+    color: var(--reports-negative);
+}
+
+.portfolio-summary {
+    text-align: center;
+    margin: 1rem 0 1.25rem;
+}
+
+.portfolio-summary h2 {
+    font-size: clamp(1.75rem, 4vw, 2.5rem);
+    line-height: 1.1;
+    margin-bottom: 0.5rem;
+}
+
+.portfolio-total {
+    font-size: clamp(1.6rem, 3vw, 2.2rem);
+    font-weight: 700;
+}
+
+.holding-name {
+    font-size: 1.4rem;
+    font-weight: 600;
+    text-align: center;
+}
+
+.holding-gain {
+    font-size: 1.6rem;
+    font-weight: 700;
+    text-align: center;
+}
+
+.holding-gain span {
+    display: block;
+    font-size: 1.05rem;
+    font-weight: 600;
+}
+
+.reports-status,
+.reports-empty,
+.reports-error {
+    color: var(--reports-text-soft);
+    text-align: center;
+    padding: 1.25rem;
+}
+
+.reports-error {
+    color: #fecaca;
+}
+
+@media screen and (max-width: 900px) {
+    .table-heading {
+        display: none;
+    }
+
+    .report-row,
+    .holding-row {
+        border-top: 1px solid var(--reports-border);
+    }
+
+    .reports-grid,
+    .holdings-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .report-cell,
+    .holding-cell {
+        border-right: none;
+        border-bottom: 1px solid var(--reports-border);
+        min-height: unset;
+    }
+
+    .report-cell:last-child,
+    .holding-cell:last-child {
+        border-bottom: none;
+    }
+
+    .report-cell::before,
+    .holding-cell::before {
+        content: attr(data-label);
+        display: block;
+        width: 100%;
+        color: #8be19d;
+        font-size: 0.8rem;
+        font-weight: 700;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        margin-bottom: 0.55rem;
+        text-align: center;
+    }
+
+    .report-cell,
+    .holding-cell {
+        flex-direction: column;
+    }
 }

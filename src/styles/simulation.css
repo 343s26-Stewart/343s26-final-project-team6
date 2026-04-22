@@ -244,6 +244,11 @@
     color: #f8fafc;
 }
 
+input:invalid {
+    border: 1px solid #be0202;
+    background-color: #db7272;
+}
+
 .trade-buttons {
     display: flex;
     gap: 0.75rem;
