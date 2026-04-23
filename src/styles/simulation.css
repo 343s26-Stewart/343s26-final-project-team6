@@ -296,11 +296,12 @@ input:invalid {
     bottom: 5.8rem;
     width: min(340px, calc(100vw - 2rem));
     display: none;
+    flex-direction: column;
     z-index: 1000;
 }
 
 .chatbot-panel.open {
-    display: block;
+    display: flex;
 }
 
 .chatbot-header {
@@ -316,7 +317,7 @@ input:invalid {
 }
 
 .chatbot-messages {
-    max-height: 220px;
+    height: 340px;
     overflow-y: auto;
     display: flex;
     flex-direction: column;
