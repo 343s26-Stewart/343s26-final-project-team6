@@ -362,7 +362,7 @@ function renderTradeLog() {
     });
 }
 
-function sendChatMessage() {
+async function sendChatMessage() {
     const input = document.querySelector("#chatbot-input");
     const messages = document.querySelector("#chatbot-messages");
     const text = input.value.trim();
@@ -376,35 +376,23 @@ function sendChatMessage() {
     userBubble.textContent = text;
     messages.appendChild(userBubble);
 
+    input.value = "";
+
     const botBubble = document.createElement("div");
     botBubble.className = "bot-message";
-    botBubble.textContent = buildBotReply(text);
+    botBubble.textContent = "...";
     messages.appendChild(botBubble);
-
-    input.value = "";
     messages.scrollTop = messages.scrollHeight;
-}
 
-function buildBotReply(userText) {
-    const question = userText.toLowerCase();
-
-    if (question.includes("pnl")) {
-        return "PnL means profit and loss. It compares your average cost to the current stock price based on how many shares you own.";
+    try {
+        const reply = await generateResponse(text);
+        botBubble.textContent = reply;
+    } catch (error) {
+        botBubble.textContent = "Sorry, I couldn't generate a response. Please try again.";
+        console.error("Chatbot error:", error);
     }
 
-    if (question.includes("buy")) {
-        return "When you buy shares, your position increases and your average cost may change depending on the trade price.";
-    }
-
-    if (question.includes("sell")) {
-        return "When you sell shares, your total shares go down. In this simulator, your average cost stays tied to the shares you still own.";
-    }
-
-    if (question.includes("risk")) {
-        return "A simple way to think about risk is price volatility. Stocks that swing more can create bigger gains, but also bigger losses.";
-    }
-
-    return `This simulator is showing ${currentSymbol} at ${formatCurrency(currentQuote?.c || 0)}. You can buy or sell shares and track your simulated PnL.`;
+    messages.scrollTop = messages.scrollHeight;
 }
 
 function formatCurrency(value) {
