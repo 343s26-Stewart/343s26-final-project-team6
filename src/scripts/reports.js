@@ -1,9 +1,29 @@
 const FAVORITES_KEY = "favorites";
 const PORTFOLIO_KEY = "portfolio";
+const MARKET_VIEW_KEY = "reports_market_view";
 
 document.addEventListener("DOMContentLoaded", () => {
+    initializeMarketViewToggle();
     initializeReportsPage();
 });
+
+function initializeMarketViewToggle() {
+    const toggleButton = document.querySelector("#market-view-toggle");
+    const reportsCard = toggleButton?.closest(".reports-card");
+
+    if (!toggleButton || !reportsCard) {
+        return;
+    }
+
+    let currentView = getSavedMarketView();
+    applyMarketView(reportsCard, toggleButton, currentView);
+
+    toggleButton.addEventListener("click", () => {
+        currentView = currentView === "card" ? "list" : "card";
+        localStorage.setItem(MARKET_VIEW_KEY, currentView);
+        applyMarketView(reportsCard, toggleButton, currentView);
+    });
+}
 
 async function initializeReportsPage() {
     const savedFavorites = getFavorites();
@@ -98,6 +118,22 @@ function renderMarketTable(reportRows, container) {
 
         container.appendChild(row);
     });
+}
+
+function applyMarketView(reportsCard, toggleButton, view) {
+    const isCardView = view === "card";
+    reportsCard.classList.toggle("reports-card-view", isCardView);
+    toggleButton.textContent = isCardView ? "List View" : "Card View";
+    toggleButton.setAttribute("aria-pressed", String(isCardView));
+}
+
+function getSavedMarketView() {
+    try {
+        return localStorage.getItem(MARKET_VIEW_KEY) === "card" ? "card" : "list";
+    } catch (error) {
+        console.error("Could not read reports view preference:", error);
+        return "list";
+    }
 }
 
 function renderPortfolioTable(reportRows, container) {
