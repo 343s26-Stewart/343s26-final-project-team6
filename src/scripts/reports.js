@@ -1,11 +1,69 @@
 const FAVORITES_KEY = "favorites";
 const PORTFOLIO_KEY = "portfolio";
 const MARKET_VIEW_KEY = "reports_market_view";
+let currentReportRows = [];
 
 document.addEventListener("DOMContentLoaded", () => {
+    insertExportButton();
     initializeMarketViewToggle();
     initializeReportsPage();
 });
+
+function insertExportButton() {
+    const reportsPage = document.querySelector(".reports-page");
+
+    if (!reportsPage) {
+        return;
+    }
+
+    const actionBar = document.createElement("div");
+    actionBar.className = "reports-page-actions";
+
+    const exportButton = document.createElement("button");
+    exportButton.id = "export-reports-button";
+    exportButton.className = "page-action-button";
+    exportButton.type = "button";
+    exportButton.textContent = "Export JSON";
+
+    exportButton.addEventListener("click", () => {
+        const jsonObj = {
+            exportedAt: new Date().toISOString(),
+            totalGainLoss: currentReportRows.reduce((sum, stock) => sum + stock.gainLoss, 0),
+            savedStocks: currentReportRows.map((stock) => ({
+                symbol: stock.symbol,
+                company: stock.company,
+                currentPrice: stock.currentPrice,
+                change24h: stock.change24h,
+                history: stock.history
+            })),
+            portfolioHoldings: currentReportRows
+                .filter((stock) => stock.shares > 0)
+                .map((stock) => ({
+                    symbol: stock.symbol,
+                    company: stock.company,
+                    shares: stock.shares,
+                    averageCost: stock.averageCost,
+                    currentPrice: stock.currentPrice,
+                    gainLoss: stock.gainLoss
+                }))
+        };
+
+        const data = JSON.stringify(jsonObj, null, 2);
+        const blob = new Blob([data], { type: "application/json" });
+        const jsonObjectUrl = URL.createObjectURL(blob);
+        const filename = `reports-export-${formatExportDate(new Date())}.json`;
+        const anchorEl = document.createElement("a");
+
+        anchorEl.href = jsonObjectUrl;
+        anchorEl.download = filename;
+        anchorEl.click();
+
+        URL.revokeObjectURL(jsonObjectUrl);
+    });
+
+    actionBar.appendChild(exportButton);
+    reportsPage.prepend(actionBar);
+}
 
 function initializeMarketViewToggle() {
     const toggleButton = document.querySelector("#market-view-toggle");
@@ -41,11 +99,13 @@ async function initializeReportsPage() {
             stocksToRender.map(async (stock) => buildStockReport(stock, portfolio[stock.symbol]))
         );
 
+        currentReportRows = reportRows;
         renderMarketTable(reportRows, marketTable);
         renderPortfolioTable(reportRows, portfolioTable);
         updateTotalGainLoss(reportRows);
     } catch (error) {
         console.error("Failed to build reports page:", error);
+        currentReportRows = [];
         marketTable.innerHTML = `<p class="reports-error">Could not load the report data right now.</p>`;
         portfolioTable.innerHTML = `<p class="reports-error">Could not calculate gain/loss right now.</p>`;
     }
@@ -134,6 +194,17 @@ function getSavedMarketView() {
         console.error("Could not read reports view preference:", error);
         return "list";
     }
+}
+
+function formatExportDate(date) {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const day = String(date.getDate()).padStart(2, "0");
+    const hours = String(date.getHours()).padStart(2, "0");
+    const minutes = String(date.getMinutes()).padStart(2, "0");
+    const seconds = String(date.getSeconds()).padStart(2, "0");
+
+    return `${year}${month}${day}-${hours}${minutes}${seconds}`;
 }
 
 function renderPortfolioTable(reportRows, container) {
