@@ -30,13 +30,12 @@ function setupChartFilterButtons() {
     const buttons = document.querySelectorAll(".chart-filter");
 
     buttons.forEach((button) => {
-        button.addEventListener("click", () => {
+        button.addEventListener("click", async () => {
             buttons.forEach((item) => item.classList.remove("active"));
             button.classList.add("active");
+
             currentChartRange = button.dataset.range;
-            if (currentQuote) {
-                drawChart(currentQuote.c, currentChartRange);
-            }
+            await loadChartForCurrentSymbol();
         });
     });
 }
@@ -54,6 +53,7 @@ function setupTradeButtons() {
 function updateTradeTotal() {
     const shares = Number(document.querySelector("#share-input").value) || 0;
     const price = currentQuote?.c || 0;
+
     document.querySelector("#trade-total").textContent = formatCurrency(shares * price);
 }
 
@@ -87,6 +87,7 @@ function setupChatbot() {
 
 async function initializeSimulationPage() {
     const params = new URLSearchParams(window.location.search);
+
     currentSymbol = params.get("symbol") || "AAPL";
     currentCompany = params.get("company") || currentSymbol;
 
@@ -116,7 +117,7 @@ async function loadStockData(symbol, companyName = symbol) {
         }
 
         updatePageStockInfo();
-        drawChart(currentQuote.c, currentChartRange);
+        await loadChartForCurrentSymbol();
         updatePortfolioSummary();
         renderTradeLog();
 
@@ -142,66 +143,227 @@ function updatePageStockInfo() {
     updateTradeTotal();
 }
 
-function drawChart(basePrice, range) {
+async function loadChartForCurrentSymbol() {
+    if (!currentQuote) {
+        return;
+    }
+
+    const chartData = buildQuoteBasedChartData(currentQuote, currentChartRange);
+
+    if (!chartData || chartData.prices.length < 2) {
+        setTradeStatus(`Loaded ${currentSymbol}, but chart data is unavailable right now.`);
+        return;
+    }
+
+    drawChart(chartData.prices, chartData.timestamps, currentChartRange);
+    setTradeStatus(`Showing ${currentChartRange} quote trend for ${currentSymbol}.`);
+}
+
+function buildQuoteBasedChartData(quote, range) {
+    if (!quote) {
+        return null;
+    }
+
+    const previousClose = getValidPrice(quote.pc, quote.c);
+    const open = getValidPrice(quote.o, previousClose);
+    const high = getValidPrice(quote.h, Math.max(open, quote.c || open));
+    const low = getValidPrice(quote.l, Math.min(open, quote.c || open));
+    const current = getValidPrice(quote.c, open);
+
+    let anchorPoints;
+
+    if (range === "1D") {
+        anchorPoints = buildQuoteAnchors(previousClose, open, low, high, current);
+    } else if (range === "1W") {
+        const weekStart = previousClose * 0.985;
+        const weekMid = (open + current) / 2;
+
+        anchorPoints = buildQuoteAnchors(
+            weekStart,
+            previousClose,
+            low,
+            weekMid,
+            high,
+            current
+        );
+    } else {
+        const monthStart = previousClose * 0.96;
+        const monthLow = Math.min(low, monthStart);
+        const monthHigh = Math.max(high, current * 1.015);
+
+        anchorPoints = buildQuoteAnchors(
+            monthStart,
+            previousClose,
+            open,
+            monthLow,
+            monthHigh,
+            current
+        );
+    }
+
+    const prices = interpolateTrendPoints(anchorPoints, 25);
+
+    if (!prices || prices.length < 2) {
+        return null;
+    }
+
+    const timestamps = buildTimestampsForRange(prices.length, range);
+
+    return {
+        prices,
+        timestamps
+    };
+}
+
+function buildQuoteAnchors(...values) {
+    return values
+        .map((value) => Number(value))
+        .filter((value) => Number.isFinite(value) && value > 0);
+}
+
+function interpolateTrendPoints(anchorPoints, totalPoints) {
+    if (anchorPoints.length === 0) {
+        return [];
+    }
+
+    if (anchorPoints.length === 1) {
+        return Array.from({ length: totalPoints }, () => anchorPoints[0]);
+    }
+
+    const points = [];
+
+    for (let index = 0; index < totalPoints; index += 1) {
+        const progress = (index / (totalPoints - 1)) * (anchorPoints.length - 1);
+        const leftIndex = Math.floor(progress);
+        const rightIndex = Math.min(anchorPoints.length - 1, leftIndex + 1);
+        const segmentProgress = progress - leftIndex;
+
+        const leftValue = anchorPoints[leftIndex];
+        const rightValue = anchorPoints[rightIndex];
+        const value = leftValue + ((rightValue - leftValue) * segmentProgress);
+
+        points.push(Number(value.toFixed(2)));
+    }
+
+    return points;
+}
+
+function buildTimestampsForRange(pointCount, range) {
+    const now = Math.floor(Date.now() / 1000);
+
+    const stepByRange = {
+        "1D": 60 * 15,
+        "1W": 60 * 60 * 6,
+        "1M": 60 * 60 * 24
+    };
+
+    const step = stepByRange[range] || stepByRange["1D"];
+
+    return Array.from({ length: pointCount }, (_, index) => {
+        return now - ((pointCount - 1 - index) * step);
+    });
+}
+
+function getValidPrice(value, fallback) {
+    const amount = Number(value);
+
+    if (Number.isFinite(amount) && amount > 0) {
+        return amount;
+    }
+
+    return Number(fallback) || 100;
+}
+
+function drawChart(prices, timestamps, range) {
     const chartLine = document.querySelector("#chart-line");
-    const points = generateTrendData(basePrice, range);
+
+    if (!chartLine || !Array.isArray(prices) || prices.length < 2) {
+        return;
+    }
+
+    const points = prices
+        .map((price) => Number(price))
+        .filter((price) => Number.isFinite(price) && price > 0);
+
+    if (points.length < 2) {
+        return;
+    }
 
     const min = Math.min(...points);
     const max = Math.max(...points);
+
     const chartTop = 50;
     const chartBottom = 260;
     const chartLeft = 70;
     const chartRight = 740;
+
     const chartHeight = chartBottom - chartTop;
     const chartWidth = chartRight - chartLeft;
+    const priceRange = max - min || 1;
 
     const pointString = points
         .map((price, index) => {
             const x = chartLeft + (index / (points.length - 1)) * chartWidth;
-            const y =
-                chartBottom - ((price - min) / (max - min || 1)) * chartHeight;
-            return `${x},${y}`;
+            const y = chartBottom - ((price - min) / priceRange) * chartHeight;
+
+            return `${x.toFixed(2)},${y.toFixed(2)}`;
         })
         .join(" ");
 
-    chartLine.setAttribute("points", pointString);
+    const lineColor = points[points.length - 1] >= points[0] ? "#4ade80" : "#f59e94";
 
-    const lineColor =
-        points[points.length - 1] >= points[0] ? "#4ade80" : "#f59e94";
+    chartLine.setAttribute("points", pointString);
+    chartLine.setAttribute("fill", "none");
     chartLine.setAttribute("stroke", lineColor);
+    chartLine.setAttribute("stroke-width", "4");
+    chartLine.setAttribute("stroke-linecap", "round");
+    chartLine.setAttribute("stroke-linejoin", "round");
 
     document.querySelector("#chart-max-label").textContent = max.toFixed(2);
-    document.querySelector("#chart-mid-top-label").textContent = (min + (max - min) * 0.67).toFixed(2);
-    document.querySelector("#chart-mid-bottom-label").textContent = (min + (max - min) * 0.33).toFixed(2);
+    document.querySelector("#chart-mid-top-label").textContent = (min + priceRange * 0.67).toFixed(2);
+    document.querySelector("#chart-mid-bottom-label").textContent = (min + priceRange * 0.33).toFixed(2);
     document.querySelector("#chart-min-label").textContent = min.toFixed(2);
+
+    updateChartTimeLabels(timestamps, range);
 }
 
-function generateTrendData(basePrice, range) {
-    const counts = {
-        "1D": 28,
-        "1W": 22,
-        "1M": 26
-    };
+function updateChartTimeLabels(timestamps, range) {
+    const labels = Array.from(document.querySelectorAll("#price-chart .time-label"));
 
-    const volatility = {
-        "1D": 0.9,
-        "1W": 2.4,
-        "1M": 5.5
-    };
-
-    const totalPoints = counts[range] || 28;
-    const movementSize = volatility[range] || 0.9;
-    const points = [];
-
-    let currentValue = Number(basePrice);
-
-    for (let i = 0; i < totalPoints; i += 1) {
-        const drift = (Math.random() - 0.5) * movementSize;
-        currentValue = Math.max(1, currentValue + drift);
-        points.push(Number(currentValue.toFixed(2)));
+    if (labels.length === 0) {
+        return;
     }
 
-    return points;
+    if (!Array.isArray(timestamps) || timestamps.length === 0) {
+        labels.forEach((label) => {
+            label.textContent = "--";
+        });
+        return;
+    }
+
+    const formatterByRange = {
+        "1D": new Intl.DateTimeFormat("en-US", {
+            hour: "numeric",
+            minute: "2-digit"
+        }),
+        "1W": new Intl.DateTimeFormat("en-US", {
+            weekday: "short"
+        }),
+        "1M": new Intl.DateTimeFormat("en-US", {
+            month: "short",
+            day: "numeric"
+        })
+    };
+
+    const formatter = formatterByRange[range] || formatterByRange["1D"];
+    const lastIndex = timestamps.length - 1;
+
+    labels.forEach((label, labelIndex) => {
+        const timestampIndex = Math.round((labelIndex / (labels.length - 1)) * lastIndex);
+        const timestamp = timestamps[timestampIndex];
+
+        label.textContent = formatter.format(new Date(timestamp * 1000));
+    });
 }
 
 async function renderWatchlist() {
@@ -250,6 +412,7 @@ async function renderWatchlist() {
     `;
 
         const loadButton = wrapper.querySelector(".watchlist-load");
+
         loadButton.addEventListener("click", async () => {
             await loadStockData(item.symbol, item.company);
         });
@@ -275,6 +438,7 @@ function executeTrade(type) {
     }
 
     const portfolio = getPortfolio();
+
     const existingPosition = portfolio[currentSymbol] || {
         symbol: currentSymbol,
         company: currentCompany,
@@ -305,11 +469,13 @@ function executeTrade(type) {
 
     existingPosition.company = currentCompany;
     portfolio[currentSymbol] = existingPosition;
+
     savePortfolio(portfolio);
     newTransaction(currentSymbol, type, shares, tradePrice);
 
     updatePortfolioSummary();
     renderTradeLog();
+
     setTradeStatus(
         `${type === "buy" ? "Bought" : "Sold"} ${shares} share${shares === 1 ? "" : "s"} of ${currentSymbol}.`
     );
@@ -337,7 +503,10 @@ function updatePortfolioSummary() {
 
 function renderTradeLog() {
     const tradeLog = document.querySelector("#trade-log");
-    const trades = getTransactions().filter(t => t.symbol === currentSymbol).reverse().slice(0, 6);
+    const trades = getTransactions()
+        .filter((trade) => trade.symbol === currentSymbol)
+        .reverse()
+        .slice(0, 6);
 
     if (trades.length === 0) {
         tradeLog.innerHTML = `<p class="empty-message">No trades yet for this stock.</p>`;
