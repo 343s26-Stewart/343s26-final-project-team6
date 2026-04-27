@@ -77,17 +77,23 @@ function insertExportButton() {
     reportsPage.prepend(actionBar);
 }
 
+// goes into local storage and applies either the list or card mode view
 function initializeMarketViewToggle() {
+
+    // get elements
     const toggleButton = document.querySelector("#market-view-toggle");
     const reportsCard = toggleButton?.closest(".reports-card");
 
+    // if elements are not there then just return
     if (!toggleButton || !reportsCard) {
         return;
     }
 
+    // get list or card view, apply it
     let currentView = getSavedMarketView();
     applyMarketView(reportsCard, toggleButton, currentView);
 
+    // when clicked, set local storage to either card or list
     toggleButton.addEventListener("click", () => {
         currentView = currentView === "card" ? "list" : "card";
         localStorage.setItem(MARKET_VIEW_KEY, currentView);
@@ -192,13 +198,20 @@ function renderMarketTable(reportRows, container) {
     });
 }
 
+// Change the classes of elements to trigger card/list view
 function applyMarketView(reportsCard, toggleButton, view) {
+    // bool, set to true/false depending on if its a card view
     const isCardView = view === "card";
+
+    // add necessary classes to activate correct CSS properties
     reportsCard.classList.toggle("reports-card-view", isCardView);
+
+    // set text content to either list view or card view
     toggleButton.textContent = isCardView ? "List View" : "Card View";
     toggleButton.setAttribute("aria-pressed", String(isCardView));
 }
 
+// get saved view from local storage
 function getSavedMarketView() {
     try {
         return localStorage.getItem(MARKET_VIEW_KEY) === "card" ? "card" : "list";
