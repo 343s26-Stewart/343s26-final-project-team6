@@ -18,6 +18,7 @@ async function generateResponse(userInput) {
             contents: [{ parts: [{ text: userInput }] }]
         }) 
     });
+
     let data = await response.json();
     return data.candidates[0].content.parts[0].text;
 }
