@@ -9,13 +9,17 @@ document.addEventListener("DOMContentLoaded", () => {
     initializeReportsPage();
 });
 
+
+// adds in functionality to the export button
 function insertExportButton() {
     const reportsPage = document.querySelector(".reports-page");
 
+    // if its not yet loaded return
     if (!reportsPage) {
         return;
     }
 
+    // create the export page button
     const actionBar = document.createElement("div");
     actionBar.className = "reports-page-actions";
 
@@ -25,7 +29,10 @@ function insertExportButton() {
     exportButton.type = "button";
     exportButton.textContent = "Export JSON";
 
+    // When the export button is clicked,
     exportButton.addEventListener("click", () => {
+
+        // format of the JSON obj and put in data
         const jsonObj = {
             exportedAt: new Date().toISOString(),
             totalGainLoss: currentReportRows.reduce((sum, stock) => sum + stock.gainLoss, 0),
@@ -48,12 +55,16 @@ function insertExportButton() {
                 }))
         };
 
+        // make the exported data a string
         const data = JSON.stringify(jsonObj, null, 2);
         const blob = new Blob([data], { type: "application/json" });
         const jsonObjectUrl = URL.createObjectURL(blob);
+        
+        // create file
         const filename = `reports-export-${formatExportDate(new Date())}.json`;
         const anchorEl = document.createElement("a");
 
+        // actually download the file
         anchorEl.href = jsonObjectUrl;
         anchorEl.download = filename;
         anchorEl.click();
@@ -61,6 +72,7 @@ function insertExportButton() {
         URL.revokeObjectURL(jsonObjectUrl);
     });
 
+    // add the element to the page
     actionBar.appendChild(exportButton);
     reportsPage.prepend(actionBar);
 }
