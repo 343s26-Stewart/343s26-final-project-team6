@@ -1,5 +1,4 @@
 document.addEventListener("DOMContentLoaded", () => {
-    setupMobileMenu();
     setupChartFilterButtons();
     setupTradeButtons();
     setupChatbot();
@@ -18,19 +17,6 @@ function translate(key, params = {}) {
         return window.I18N.t(key, params);
     }
     return key;
-}
-
-function setupMobileMenu() {
-    const navButton = document.querySelector("#nav-menu-button");
-    const mobileMenu = document.querySelector("#mobile-menu");
-
-    if (!navButton || !mobileMenu) {
-        return;
-    }
-
-    navButton.addEventListener("click", () => {
-        mobileMenu.classList.toggle("active");
-    });
 }
 
 function setupChartFilterButtons() {

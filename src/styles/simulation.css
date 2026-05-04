@@ -465,6 +465,15 @@ input:invalid {
     }
 }
 
+.skip-buttons-mobile {
+    display:none;
+}
+
+.skip-buttons-desktop {
+    display:block;
+}
+
+
 @media (max-width: 980px) {
     .simulation-layout {
         flex-direction: column;
@@ -472,6 +481,13 @@ input:invalid {
 
     .simulation-summary-row {
         grid-template-columns: 1fr;
+    }
+
+    .skip-buttons-desktop {
+        display:none;
+    }
+    .skip-buttons-mobile {
+        display:block;
     }
 }
 

@@ -7,6 +7,7 @@ const TRANSLATIONS = {
         nav_simulation: "Simulation",
         nav_reports: "Reports",
         nav_open_menu: "Open menu",
+        nav_close_menu: "Close menu",
         lang_label: "Language",
         lang_en: "English",
         lang_es: "Spanish",
@@ -54,6 +55,8 @@ const TRANSLATIONS = {
         simulation_subtitle: "Quote and simulated activity",
         simulation_live_price: "Live Price",
         simulation_shares_owned: "Shares Owned",
+        simulation_skip_to_trade: "Skip to trade form",
+        simulation_skip_to_trades: "Skip to recent activity",
         simulation_average_cost: "Average Cost",
         simulation_current_pnl: "Current PnL",
         simulation_recent_trades: "Recent Trades",
@@ -106,6 +109,7 @@ const TRANSLATIONS = {
         nav_simulation: "Simulación",
         nav_reports: "Reportes",
         nav_open_menu: "Abrir menú",
+        nav_close_menu: "Cerrar menú",
         lang_label: "Idioma",
         lang_en: "Inglés",
         lang_es: "Español",
@@ -198,7 +202,9 @@ const TRANSLATIONS = {
         simulation_trade_done: "{{action}} {{shares}} acción{{plural}} de {{symbol}}.",
         simulation_trade_bought: "Compraste",
         simulation_trade_sold: "Vendiste",
-        simulation_chat_error: "Lo siento, no pude generar una respuesta. Inténtalo de nuevo."
+        simulation_chat_error: "Lo siento, no pude generar una respuesta. Inténtalo de nuevo.",
+        simulation_skip_to_trade: "Salta al formulario de ejecución",
+        simulation_skip_to_trades: "Salta a tu actividád",
     }
 };
 
