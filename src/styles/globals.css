@@ -48,6 +48,27 @@ button {
   align-items: center;
 }
 
+.language-picker {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  color: #cbd5e1;
+  font-size: 0.9rem;
+}
+
+.language-select {
+  border: 1px solid #475569;
+  border-radius: 6px;
+  background-color: #1e293b;
+  color: #f8fafc;
+  padding: 0.15rem 0.45rem;
+}
+
+.mobile-language-picker {
+  width: fit-content;
+  margin-top: 0.4rem;
+}
+
 #logo {
   font-size: 1.25rem;
   font-weight: 700;

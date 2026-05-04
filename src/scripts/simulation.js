@@ -13,6 +13,13 @@ let currentCompany = "Apple Inc";
 let currentQuote = null;
 let currentChartRange = "1D";
 
+function translate(key, params = {}) {
+    if (window.I18N?.t) {
+        return window.I18N.t(key, params);
+    }
+    return key;
+}
+
 function setupMobileMenu() {
     const navButton = document.querySelector("#nav-menu-button");
     const mobileMenu = document.querySelector("#mobile-menu");
@@ -96,7 +103,7 @@ async function initializeSimulationPage() {
 }
 
 async function loadStockData(symbol, companyName = symbol) {
-    setTradeStatus("Loading stock data...");
+    setTradeStatus(translate("simulation_loading_stock"));
 
     try {
         currentSymbol = symbol;
@@ -105,7 +112,7 @@ async function loadStockData(symbol, companyName = symbol) {
         const quote = await getQuote(symbol);
 
         if (!quote || typeof quote.c !== "number" || quote.c === 0) {
-            setTradeStatus("Could not load stock quote.");
+            setTradeStatus(translate("simulation_load_quote_error"));
             return;
         }
 
@@ -121,16 +128,16 @@ async function loadStockData(symbol, companyName = symbol) {
         updatePortfolioSummary();
         renderTradeLog();
 
-        setTradeStatus(`Loaded ${currentSymbol}.`);
+        setTradeStatus(translate("simulation_loaded_symbol", { symbol: currentSymbol }));
     } catch (error) {
         console.error("Error loading simulation stock:", error);
-        setTradeStatus("Something went wrong while loading this stock.");
+        setTradeStatus(translate("simulation_load_general_error"));
     }
 }
 
 function updatePageStockInfo() {
     document.querySelector("#stock-title").textContent = `${currentCompany} (${currentSymbol})`;
-    document.querySelector("#stock-subtitle").textContent = "Quote and simulated activity";
+    document.querySelector("#stock-subtitle").textContent = translate("simulation_subtitle");
     document.querySelector("#current-price").textContent = formatCurrency(currentQuote.c);
 
     document.querySelector("#side-symbol").textContent = currentSymbol;
@@ -151,12 +158,15 @@ async function loadChartForCurrentSymbol() {
     const chartData = buildQuoteBasedChartData(currentQuote, currentChartRange);
 
     if (!chartData || chartData.prices.length < 2) {
-        setTradeStatus(`Loaded ${currentSymbol}, but chart data is unavailable right now.`);
+        setTradeStatus(translate("simulation_chart_unavailable", { symbol: currentSymbol }));
         return;
     }
 
     drawChart(chartData.prices, chartData.timestamps, currentChartRange);
-    setTradeStatus(`Showing ${currentChartRange} quote trend for ${currentSymbol}.`);
+    setTradeStatus(translate("simulation_showing_trend", {
+        range: currentChartRange,
+        symbol: currentSymbol
+    }));
 }
 
 function buildQuoteBasedChartData(quote, range) {
@@ -368,7 +378,7 @@ function updateChartTimeLabels(timestamps, range) {
 
 async function renderWatchlist() {
     const watchlistContainer = document.querySelector("#watchlist");
-    watchlistContainer.innerHTML = `<p class="empty-message">Loading watchlist...</p>`;
+    watchlistContainer.innerHTML = `<p class="empty-message">${translate("simulation_loading_watchlist")}</p>`;
 
     const watchlistItems = [];
 
@@ -390,7 +400,7 @@ async function renderWatchlist() {
     }
 
     if (watchlistItems.length === 0) {
-        watchlistContainer.innerHTML = `<p class="empty-message">Could not load watchlist.</p>`;
+        watchlistContainer.innerHTML = `<p class="empty-message">${translate("simulation_watchlist_error")}</p>`;
         return;
     }
 
@@ -407,7 +417,7 @@ async function renderWatchlist() {
       </div>
       <div>
         <div>${formatCurrency(item.price)}</div>
-        <button class="watchlist-load" type="button">Load</button>
+        <button class="watchlist-load" type="button">${translate("simulation_watchlist_load")}</button>
       </div>
     `;
 
@@ -428,12 +438,12 @@ function executeTrade(type) {
     const tradePrice = currentQuote?.c;
 
     if (!shares || shares <= 0) {
-        setTradeStatus("Enter a valid number of shares.");
+        setTradeStatus(translate("simulation_invalid_shares"));
         return;
     }
 
     if (!tradePrice || tradePrice <= 0) {
-        setTradeStatus("No market price available.");
+        setTradeStatus(translate("simulation_no_price"));
         return;
     }
 
@@ -456,7 +466,7 @@ function executeTrade(type) {
         existingPosition.averageCost = Number(newAverageCost.toFixed(2));
     } else {
         if (shares > existingPosition.shares) {
-            setTradeStatus("You cannot sell more shares than you own.");
+            setTradeStatus(translate("simulation_cannot_sell"));
             return;
         }
 
@@ -477,7 +487,12 @@ function executeTrade(type) {
     renderTradeLog();
 
     setTradeStatus(
-        `${type === "buy" ? "Bought" : "Sold"} ${shares} share${shares === 1 ? "" : "s"} of ${currentSymbol}.`
+        translate("simulation_trade_done", {
+            action: type === "buy" ? translate("simulation_trade_bought") : translate("simulation_trade_sold"),
+            shares,
+            plural: shares === 1 ? "" : "s",
+            symbol: currentSymbol
+        })
     );
 }
 
@@ -509,7 +524,7 @@ function renderTradeLog() {
         .slice(0, 6);
 
     if (trades.length === 0) {
-        tradeLog.innerHTML = `<p class="empty-message">No trades yet for this stock.</p>`;
+        tradeLog.innerHTML = `<p class="empty-message">${translate("simulation_no_trades")}</p>`;
         return;
     }
 
@@ -557,7 +572,7 @@ async function sendChatMessage() {
         const reply = await generateResponse(text);
         botBubble.textContent = reply;
     } catch (error) {
-        botBubble.textContent = "Sorry, I couldn't generate a response. Please try again.";
+        botBubble.textContent = translate("simulation_chat_error");
         console.error("Chatbot error:", error);
     }
 
@@ -571,3 +586,11 @@ function formatCurrency(value) {
 function setTradeStatus(message) {
     document.querySelector("#trade-status").textContent = message;
 }
+
+document.addEventListener("languageChanged", () => {
+    if (currentQuote) {
+        updatePageStockInfo();
+    }
+    renderTradeLog();
+    renderWatchlist();
+});

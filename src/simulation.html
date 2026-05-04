@@ -14,16 +14,23 @@
     <nav id="nav-desktop">
         <a href="index.html" id="logo">StalkStocks</a>
         <div id="nav-desktop-links">
-            <a href="home.html" class="nav-link">Home</a>
-            <a href="simulation.html" class="nav-link">Simulation</a>
-            <a href="reports.html" class="nav-link">Reports</a>
+            <a href="home.html" class="nav-link" data-i18n="nav_home">Home</a>
+            <a href="simulation.html" class="nav-link" data-i18n="nav_simulation">Simulation</a>
+            <a href="reports.html" class="nav-link" data-i18n="nav_reports">Reports</a>
+            <label class="language-picker">
+                <span data-i18n="lang_label">Language</span>
+                <select class="language-select" aria-label="Language">
+                    <option value="en" data-i18n="lang_en">English</option>
+                    <option value="es" data-i18n="lang_es">Spanish</option>
+                </select>
+            </label>
         </div>
     </nav>
 
     <!-- MOBILE NAV -->
     <nav id="nav-mobile">
         <a href="index.html" id="logo">StalkStocks</a>
-        <button id="nav-menu-button" aria-label="Open menu">
+        <button id="nav-menu-button" aria-label="Open menu" data-i18n-aria-label="nav_open_menu">
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
                 stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" id="nav-menu-svg">
                 <path d="M4 5h16" />
@@ -34,9 +41,16 @@
     </nav>
 
     <div id="mobile-menu">
-        <a href="home.html" class="mobile-menu-link">Home</a>
-        <a href="simulation.html" class="mobile-menu-link">Simulation</a>
-        <a href="reports.html" class="mobile-menu-link">Reports</a>
+        <a href="home.html" class="mobile-menu-link" data-i18n="nav_home">Home</a>
+        <a href="simulation.html" class="mobile-menu-link" data-i18n="nav_simulation">Simulation</a>
+        <a href="reports.html" class="mobile-menu-link" data-i18n="nav_reports">Reports</a>
+        <label class="language-picker mobile-language-picker">
+            <span data-i18n="lang_label">Language</span>
+            <select class="language-select" aria-label="Language">
+                <option value="en" data-i18n="lang_en">English</option>
+                <option value="es" data-i18n="lang_es">Spanish</option>
+            </select>
+        </label>
     </div>
     <script src="./scripts/mobile-nav.js"></script>
 
@@ -47,13 +61,13 @@
                 <article class="chart-card">
                     <div class="chart-header">
                         <div>
-                            <p class="eyebrow">Simulation Market View</p>
+                            <p class="eyebrow" data-i18n="simulation_eyebrow">Simulation Market View</p>
                             <h1 id="stock-title">Loading stock...</h1>
-                            <p id="stock-subtitle" class="muted-text">Quote and simulated activity</p>
+                            <p id="stock-subtitle" class="muted-text" data-i18n="simulation_subtitle">Quote and simulated activity</p>
                         </div>
 
                         <div class="price-badge">
-                            <span class="price-label">Live Price</span>
+                            <span class="price-label" data-i18n="simulation_live_price">Live Price</span>
                             <span id="current-price">$0.00</span>
                         </div>
                     </div>
@@ -65,7 +79,7 @@
                     </div>
 
                     <div class="chart-area">
-                        <svg id="price-chart" viewBox="0 0 800 320" role="img" aria-label="Stock trend chart">
+                        <svg id="price-chart" viewBox="0 0 800 320" role="img" aria-label="Stock trend chart" data-i18n-aria-label="simulation_chart_aria">
                             <rect x="0" y="0" width="800" height="320" rx="14" class="chart-bg"></rect>
 
                             <line x1="60" y1="50" x2="760" y2="50" class="grid-line"></line>
@@ -94,29 +108,29 @@
 
                 <article class="simulation-summary-row">
                     <div class="summary-card">
-                        <p class="summary-label">Shares Owned</p>
+                        <p class="summary-label" data-i18n="simulation_shares_owned">Shares Owned</p>
                         <p id="owned-shares" class="summary-value">0</p>
                     </div>
 
                     <div class="summary-card">
-                        <p class="summary-label">Average Cost</p>
+                        <p class="summary-label" data-i18n="simulation_average_cost">Average Cost</p>
                         <p id="average-cost" class="summary-value">$0.00</p>
                     </div>
 
                     <div class="summary-card pnl-card">
-                        <p class="summary-label">Current PnL</p>
+                        <p class="summary-label" data-i18n="simulation_current_pnl">Current PnL</p>
                         <p id="pnl-value" class="summary-value">$0.00</p>
                     </div>
                 </article>
 
                 <article class="trade-log-card">
                     <div class="panel-header">
-                        <h2>Recent Trades</h2>
-                        <p class="muted-text">Saved locally in your browser</p>
+                        <h2 data-i18n="simulation_recent_trades">Recent Trades</h2>
+                        <p class="muted-text" data-i18n="simulation_saved_local">Saved locally in your browser</p>
                     </div>
 
                     <div id="trade-log" class="trade-log">
-                        <p class="empty-message">No trades yet for this stock.</p>
+                        <p class="empty-message" data-i18n="simulation_no_trades">No trades yet for this stock.</p>
                     </div>
                 </article>
             </section>
@@ -125,24 +139,24 @@
             <aside class="simulation-right">
                 <article class="side-card">
                     <div class="panel-header">
-                        <h2>Selected Stock</h2>
+                        <h2 data-i18n="simulation_selected_stock">Selected Stock</h2>
                     </div>
 
                     <div class="selected-stock-box">
-                        <p class="stock-meta-line"><span>Symbol:</span> <strong id="side-symbol">--</strong></p>
-                        <p class="stock-meta-line"><span>Company:</span> <strong id="side-company">--</strong></p>
-                        <p class="stock-meta-line"><span>Open:</span> <strong id="open-price">$0.00</strong></p>
-                        <p class="stock-meta-line"><span>High:</span> <strong id="high-price">$0.00</strong></p>
-                        <p class="stock-meta-line"><span>Low:</span> <strong id="low-price">$0.00</strong></p>
-                        <p class="stock-meta-line"><span>Prev Close:</span> <strong id="prev-close-price">$0.00</strong>
+                        <p class="stock-meta-line"><span data-i18n="simulation_label_symbol">Symbol:</span> <strong id="side-symbol">--</strong></p>
+                        <p class="stock-meta-line"><span data-i18n="simulation_label_company">Company:</span> <strong id="side-company">--</strong></p>
+                        <p class="stock-meta-line"><span data-i18n="simulation_label_open">Open:</span> <strong id="open-price">$0.00</strong></p>
+                        <p class="stock-meta-line"><span data-i18n="simulation_label_high">High:</span> <strong id="high-price">$0.00</strong></p>
+                        <p class="stock-meta-line"><span data-i18n="simulation_label_low">Low:</span> <strong id="low-price">$0.00</strong></p>
+                        <p class="stock-meta-line"><span data-i18n="simulation_label_prev_close">Prev Close:</span> <strong id="prev-close-price">$0.00</strong>
                         </p>
                     </div>
                 </article>
 
                 <article class="side-card">
                     <div class="panel-header">
-                        <h2>Quick Watchlist</h2>
-                        <p class="muted-text">Click a ticker to load it here</p>
+                        <h2 data-i18n="simulation_watchlist">Quick Watchlist</h2>
+                        <p class="muted-text" data-i18n="simulation_watchlist_subtitle">Click a ticker to load it here</p>
                     </div>
 
                     <div id="watchlist" class="watchlist"></div>
@@ -150,19 +164,19 @@
 
                 <article class="side-card">
                     <div class="panel-header">
-                        <h2>Execute Trade</h2>
+                        <h2 data-i18n="simulation_execute_trade">Execute Trade</h2>
                     </div>
 
                     <form id="trade-form" class="trade-form">
-                        <label for="share-input">Shares</label>
+                        <label for="share-input" data-i18n="simulation_shares">Shares</label>
                         <input id="share-input" type="number" min="1" step="1" value="1" />
 
-                        <label>Total Cost</label>
+                        <label data-i18n="simulation_total_cost">Total Cost</label>
                         <div id="trade-total" class="trade-total">$0.00</div>
 
                         <div class="trade-buttons">
-                            <button id="buy-button" type="button" class="buy-button">Buy</button>
-                            <button id="sell-button" type="button" class="sell-button">Sell</button>
+                            <button id="buy-button" type="button" class="buy-button" data-i18n="simulation_buy">Buy</button>
+                            <button id="sell-button" type="button" class="sell-button" data-i18n="simulation_sell">Sell</button>
                         </div>
 
                         <p id="trade-status" class="status-text" aria-live="polite"></p>
@@ -173,39 +187,40 @@
 
         <!-- CHATBOT -->
         <button id="chatbot-toggle" class="chatbot-toggle" type="button" aria-expanded="false"
-            aria-label="Open chatbot">
+            aria-label="Open chatbot" data-i18n-aria-label="simulation_open_chatbot">
             <img src="assets/chatbot.jpeg" alt="Chatbot" class="chatbot-icon" />
-            <span class="sr-only">Open chatbot</span>
+            <span class="sr-only" data-i18n="simulation_open_chatbot">Open chatbot</span>
         </button>
 
         <section id="chatbot-panel" class="chatbot-panel" aria-hidden="true">
             <div class="chatbot-header">
-                <h2>Stock Help</h2>
-                <button id="chatbot-close" type="button" aria-label="Close chatbot">×</button>
+                <h2 data-i18n="simulation_chatbot_help">Stock Help</h2>
+                <button id="chatbot-close" type="button" aria-label="Close chatbot" data-i18n-aria-label="simulation_close_chatbot">×</button>
             </div>
 
             <div id="chatbot-messages" class="chatbot-messages">
                 <div class="bot-message">
-                    Ask about this stock or the simulator. Try:
+                    <span data-i18n="simulation_chat_intro">Ask about this stock or the simulator. Try:</span>
                     <br />
-                    “What does PnL mean?”
+                    <span data-i18n="simulation_chat_example1">"What does PnL mean?"</span>
                     <br />
-                    “What happens when I buy more shares?”
+                    <span data-i18n="simulation_chat_example2">"What happens when I buy more shares?"</span>
                 </div>
             </div>
 
             <div class="chatbot-input-row">
-                <label for="chatbot-input" class="sr-only">Type a chatbot question</label>
-                <input id="chatbot-input" type="text" placeholder="Ask a stock question..." />
-                <button id="chatbot-send" type="button">Send</button>
+                <label for="chatbot-input" class="sr-only" data-i18n="simulation_chat_prompt_label">Type a chatbot question</label>
+                <input id="chatbot-input" type="text" placeholder="Ask a stock question..." data-i18n-placeholder="simulation_chat_placeholder" />
+                <button id="chatbot-send" type="button" data-i18n="simulation_send">Send</button>
             </div>
         </section>
     </main>
 
     <footer class="site-footer">
-        <p>StalkStocks © 2026 | Practice trades safely with simulated investing tools.</p>
+        <p data-i18n="simulation_footer">StalkStocks © 2026 | Practice trades safely with simulated investing tools.</p>
     </footer>
 
+    <script src="./scripts/i18n.js"></script>
     <script src="./scripts/API/config.js"></script>
     <script src="./scripts/API/finnhubAPI.js"></script>
     <script src="./scripts/data/storage.js"></script>
