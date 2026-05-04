@@ -14,16 +14,23 @@
     <nav id="nav-desktop">
         <a href="index.html" id="logo">StalkStocks</a>
         <div id="nav-desktop-links">
-            <a href="home.html" class="nav-link">Home</a>
-            <a href="simulation.html" class="nav-link">Simulation</a>
-            <a href="reports.html" class="nav-link">Reports</a>
+            <a href="home.html" class="nav-link" data-i18n="nav_home">Home</a>
+            <a href="simulation.html" class="nav-link" data-i18n="nav_simulation">Simulation</a>
+            <a href="reports.html" class="nav-link" data-i18n="nav_reports">Reports</a>
+            <label class="language-picker">
+                <span data-i18n="lang_label">Language</span>
+                <select class="language-select" aria-label="Language">
+                    <option value="en" data-i18n="lang_en">English</option>
+                    <option value="es" data-i18n="lang_es">Spanish</option>
+                </select>
+            </label>
         </div>
     </nav>
 
     <!-- MOBILE NAV -->
     <nav id="nav-mobile">
         <a href="index.html" id="logo">StalkStocks</a>
-        <button id="nav-menu-button" aria-label="Open menu">
+        <button id="nav-menu-button" aria-label="Open menu" data-i18n-aria-label="nav_open_menu">
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
                 stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" id="nav-menu-svg">
                 <path d="M4 5h16" />
@@ -34,9 +41,16 @@
     </nav>
 
     <div id="mobile-menu">
-        <a href="home.html" class="mobile-menu-link">Home</a>
-        <a href="simulation.html" class="mobile-menu-link">Simulation</a>
-        <a href="reports.html" class="mobile-menu-link">Reports</a>
+        <a href="home.html" class="mobile-menu-link" data-i18n="nav_home">Home</a>
+        <a href="simulation.html" class="mobile-menu-link" data-i18n="nav_simulation">Simulation</a>
+        <a href="reports.html" class="mobile-menu-link" data-i18n="nav_reports">Reports</a>
+        <label class="language-picker mobile-language-picker">
+            <span data-i18n="lang_label">Language</span>
+            <select class="language-select" aria-label="Language">
+                <option value="en" data-i18n="lang_en">English</option>
+                <option value="es" data-i18n="lang_es">Spanish</option>
+            </select>
+        </label>
     </div>
 
 
@@ -44,24 +58,25 @@
     <table id="stock-table">
         <thead>
             <tr id="stock-table-header">
-                <td colspan="9">Popular Stocks</td>
+                <td colspan="9" data-i18n="home_popular_stocks">Popular Stocks</td>
             </tr>
             <tr>
-                <th scope="col">Symbol</th>
-                <th scope="col">Price</th>
-                <th scope="col">Change</th>
-                <th scope="col">% Change</th>
-                <th scope="col">High</th>
-                <th scope="col">Low</th>
-                <th scope="col">Open</th>
-                <th scope="col">Prev Close</th>
-                <th scope="col">Favorite</th>
+                <th scope="col" data-i18n="home_col_symbol">Symbol</th>
+                <th scope="col" data-i18n="home_col_price">Price</th>
+                <th scope="col" data-i18n="home_col_change">Change</th>
+                <th scope="col" data-i18n="home_col_percent_change">% Change</th>
+                <th scope="col" data-i18n="home_col_high">High</th>
+                <th scope="col" data-i18n="home_col_low">Low</th>
+                <th scope="col" data-i18n="home_col_open">Open</th>
+                <th scope="col" data-i18n="home_col_prev_close">Prev Close</th>
+                <th scope="col" data-i18n="home_col_favorite">Favorite</th>
             </tr>
         </thead>
         <tbody id="stock-table-body">
 
         </tbody>
     </table>
+    <script src="scripts/i18n.js"></script>
     <script src="scripts/API/config.js"></script>
     <script src="scripts/API/finnhubAPI.js"></script>
     <script src="scripts/data/storage.js"></script>

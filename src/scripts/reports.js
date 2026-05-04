@@ -2,6 +2,14 @@ const FAVORITES_KEY = "favorites";
 const PORTFOLIO_KEY = "portfolio";
 const MARKET_VIEW_KEY = "reports_market_view";
 let currentReportRows = [];
+let currentMarketView = "list";
+
+function translate(key, params = {}) {
+    if (window.I18N?.t) {
+        return window.I18N.t(key, params);
+    }
+    return key;
+}
 
 document.addEventListener("DOMContentLoaded", () => {
     insertExportButton();
@@ -27,7 +35,7 @@ function insertExportButton() {
     exportButton.id = "export-reports-button";
     exportButton.className = "page-action-button";
     exportButton.type = "button";
-    exportButton.textContent = "Export JSON";
+    exportButton.textContent = translate("reports_export_json");
 
     // When the export button is clicked,
     exportButton.addEventListener("click", () => {
@@ -90,14 +98,14 @@ function initializeMarketViewToggle() {
     }
 
     // get list or card view, apply it
-    let currentView = getSavedMarketView();
-    applyMarketView(reportsCard, toggleButton, currentView);
+    currentMarketView = getSavedMarketView();
+    applyMarketView(reportsCard, toggleButton, currentMarketView);
 
     // when clicked, set local storage to either card or list
     toggleButton.addEventListener("click", () => {
-        currentView = currentView === "card" ? "list" : "card";
-        localStorage.setItem(MARKET_VIEW_KEY, currentView);
-        applyMarketView(reportsCard, toggleButton, currentView);
+        currentMarketView = currentMarketView === "card" ? "list" : "card";
+        localStorage.setItem(MARKET_VIEW_KEY, currentMarketView);
+        applyMarketView(reportsCard, toggleButton, currentMarketView);
     });
 }
 
@@ -124,8 +132,8 @@ async function initializeReportsPage() {
     } catch (error) {
         console.error("Failed to build reports page:", error);
         currentReportRows = [];
-        marketTable.innerHTML = `<p class="reports-error">Could not load the report data right now.</p>`;
-        portfolioTable.innerHTML = `<p class="reports-error">Could not calculate gain/loss right now.</p>`;
+        marketTable.innerHTML = `<p class="reports-error">${translate("reports_error_market")}</p>`;
+        portfolioTable.innerHTML = `<p class="reports-error">${translate("reports_error_portfolio")}</p>`;
     }
 }
 
@@ -167,7 +175,7 @@ async function buildStockReport(stock, portfolioEntry) {
 
 function renderMarketTable(reportRows, container) {
     if (!reportRows.length) {
-        container.innerHTML = `<p class="reports-empty">No saved stocks yet. Make a trade in the simulation page to see reports here.</p>`;
+        container.innerHTML = `<p class="reports-empty">${translate("reports_empty_saved")}</p>`;
         return;
     }
 
@@ -178,16 +186,16 @@ function renderMarketTable(reportRows, container) {
         row.className = "report-row reports-grid";
 
         row.innerHTML = `
-            <div class="report-cell" data-label="Stock Name">
+            <div class="report-cell" data-label="${translate("reports_market_col_name")}">
                 <div class="stock-name-block">
                     <span class="stock-company">${stock.company}</span>
                     <span class="stock-symbol">- ${stock.symbol}</span>
                 </div>
             </div>
-            <div class="report-cell" data-label="Past Month Activity">
+            <div class="report-cell" data-label="${translate("reports_market_col_month")}">
                 <div class="chart-shell">${createSparklineSVG(stock.history, stock.symbol, index)}</div>
             </div>
-            <div class="report-cell" data-label="24 Hour Change">
+            <div class="report-cell" data-label="${translate("reports_market_col_change")}">
                 <span class="change-value ${stock.change24h >= 0 ? "change-positive" : "change-negative"}">
                     ${formatSignedCurrency(stock.change24h)}
                 </span>
@@ -207,7 +215,7 @@ function applyMarketView(reportsCard, toggleButton, view) {
     reportsCard.classList.toggle("reports-card-view", isCardView);
 
     // set text content to either list view or card view
-    toggleButton.textContent = isCardView ? "List View" : "Card View";
+    toggleButton.textContent = isCardView ? translate("reports_view_list") : translate("reports_view_card");
     toggleButton.setAttribute("aria-pressed", String(isCardView));
 }
 
@@ -236,7 +244,7 @@ function renderPortfolioTable(reportRows, container) {
     const ownedStocks = reportRows.filter((row) => row.shares > 0);
 
     if (!ownedStocks.length) {
-        container.innerHTML = `<p class="reports-empty">You do not have any saved simulation stocks yet.</p>`;
+        container.innerHTML = `<p class="reports-empty">${translate("reports_empty_portfolio")}</p>`;
         return;
     }
 
@@ -247,10 +255,10 @@ function renderPortfolioTable(reportRows, container) {
         row.className = "holding-row holdings-grid";
 
         row.innerHTML = `
-            <div class="holding-cell" data-label="Stock Name">
+            <div class="holding-cell" data-label="${translate("reports_holdings_col_name")}">
                 <p class="holding-name">${stock.company} - ${stock.symbol}</p>
             </div>
-            <div class="holding-cell" data-label="Your Loss / Gain">
+            <div class="holding-cell" data-label="${translate("reports_holdings_col_gain")}">
                 <p class="holding-gain ${stock.gainLoss >= 0 ? "gain-positive" : "gain-negative"}">
                     ${formatSignedCurrency(stock.gainLoss)}
                     <span>USD</span>
@@ -265,7 +273,7 @@ function renderPortfolioTable(reportRows, container) {
 function updateTotalGainLoss(reportRows) {
     const total = reportRows.reduce((sum, stock) => sum + stock.gainLoss, 0);
     const totalElement = document.querySelector("#total-gain-loss");
-    totalElement.textContent = `Total Gain/Loss: ${formatSignedCurrency(total)} USD`;
+    totalElement.textContent = `${translate("reports_total_gain_loss")}: ${formatSignedCurrency(total)} USD`;
     totalElement.classList.toggle("gain-positive", total >= 0);
     totalElement.classList.toggle("gain-negative", total < 0);
 }
@@ -294,13 +302,32 @@ function createSparklineSVG(points, symbol, index) {
             <rect class="spark-bg" x="0" y="0" width="${width}" height="${height}" rx="8"></rect>
             <line class="spark-grid" x1="${padding.left}" y1="${baselineOne}" x2="${width - padding.right}" y2="${baselineOne}"></line>
             <line class="spark-grid" x1="${padding.left}" y1="${baselineTwo}" x2="${width - padding.right}" y2="${baselineTwo}"></line>
-            <text class="spark-label" x="${padding.left}" y="${height - 8}">Prev Close</text>
-            <text class="spark-label" x="${width / 2 - 18}" y="${height - 8}">Session</text>
-            <text class="spark-label" x="${width - 48}" y="${height - 8}">Now</text>
+            <text class="spark-label" x="${padding.left}" y="${height - 8}">${translate("reports_spark_prev_close")}</text>
+            <text class="spark-label" x="${width / 2 - 18}" y="${height - 8}">${translate("reports_spark_session")}</text>
+            <text class="spark-label" x="${width - 48}" y="${height - 8}">${translate("reports_spark_now")}</text>
             <polyline class="spark-line" stroke="${lineColor}" points="${polylinePoints}"></polyline>
         </svg>
     `;
 }
+
+document.addEventListener("languageChanged", () => {
+    const exportButton = document.querySelector("#export-reports-button");
+    if (exportButton) {
+        exportButton.textContent = translate("reports_export_json");
+    }
+
+    const toggleButton = document.querySelector("#market-view-toggle");
+    const reportsCard = toggleButton?.closest(".reports-card");
+    if (toggleButton && reportsCard) {
+        applyMarketView(reportsCard, toggleButton, currentMarketView);
+    }
+
+    if (currentReportRows.length) {
+        renderMarketTable(currentReportRows, document.querySelector("#market-report-table"));
+        renderPortfolioTable(currentReportRows, document.querySelector("#portfolio-report-table"));
+        updateTotalGainLoss(currentReportRows);
+    }
+});
 
 function buildTrendDataFromQuote(quote) {
     const previousClose = getValidPrice(quote.pc, quote.c);

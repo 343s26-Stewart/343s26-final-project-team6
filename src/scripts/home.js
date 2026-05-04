@@ -12,6 +12,13 @@ class RateLimitError extends Error {
   }
 }
 
+function translate(key, params = {}) {
+  if (window.I18N?.t) {
+    return window.I18N.t(key, params);
+  }
+  return key;
+}
+
 
 // Upon favorite button click, add class to change styling of button
 function updateFavoriteIcon(button, isFavorite) {
@@ -52,7 +59,7 @@ async function loadHome() {
 
         //Rate limit check
         if (!quote || typeof quote.c !== 'number') {
-          throw new RateLimitError('Rate limit reached. Try again in a minute.');
+          throw new RateLimitError(translate("home_rate_limit"));
         }
 
         return { symbol, quote };
@@ -73,7 +80,7 @@ async function loadHome() {
         <td>${quote.l.toFixed(2)}</td>
         <td>${quote.o.toFixed(2)}</td>
         <td>${quote.pc.toFixed(2)}</td>
-        <td><button class="fav-btn">Favorite</button></td>
+        <td><button class="fav-btn">${translate("home_favorite_button")}</button></td>
       `;
 
       const favBtn = row.querySelector(".fav-btn");
@@ -97,7 +104,7 @@ async function loadHome() {
       errorMessage.textContent = err.message;
 
     } else {
-      errorMessage.textContent = 'Failed to load data.';
+      errorMessage.textContent = translate("home_error_load");
     }
 
     errorMessage.classList.add("error-msg");
@@ -109,5 +116,11 @@ async function loadHome() {
     }
   }
 }
+
+document.addEventListener("languageChanged", () => {
+  document.querySelectorAll(".fav-btn").forEach((button) => {
+    button.textContent = translate("home_favorite_button");
+  });
+});
 
 document.addEventListener('DOMContentLoaded', loadHome);
