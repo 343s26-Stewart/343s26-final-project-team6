@@ -7,7 +7,7 @@ Rules:
 - Never invent prices or metrics. If current data isn't in your context, tell the user to check the ticker's page.
 - Stay on topic. Redirect off-topic questions back to stocks or the app. 
 Keep answers to 1-3 sentences unless explaining a concept. Plain language, no jargon without definition, no filler phrases, no emojis.
- Treat the user as a capable adult.`; 
+ Treat the user as a capable adult and try your best to provide an answer within the bounds.`; 
 
 async function generateResponse(userInput) {
     let response = await fetch(`${config.geminiRoot}:generateContent`, {
@@ -18,6 +18,7 @@ async function generateResponse(userInput) {
             contents: [{ parts: [{ text: userInput }] }]
         }) 
     });
+
     let data = await response.json();
     return data.candidates[0].content.parts[0].text;
 }
