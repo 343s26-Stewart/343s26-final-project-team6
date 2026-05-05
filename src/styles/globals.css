@@ -43,6 +43,11 @@ button {
   align-items: center;
 }
 
+#nav-mobile {
+  position: relative;
+  z-index: 1100;
+}
+
 #nav-desktop-links {
   display: flex;
   align-items: center;
@@ -89,23 +94,38 @@ button {
 
 /* MOBILE NAV BUTTON */
 #nav-menu-button {
-  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 2.75rem;
+  min-height: 2.75rem;
+  padding: 0.5rem;
+  border-radius: 6px;
+  color: #cbd5e1;
+  transition: background-color 0.2s ease, color 0.2s ease;
 }
 
 #nav-menu-svg {
-  color: #cbd5e1;
+  display: block;
   transition: color 0.2s ease, transform 0.2s ease;
 }
 
-#nav-menu-button:hover #nav-menu-svg {
+#nav-menu-button:hover,
+#nav-menu-button.active,
+#nav-menu-button:focus-visible {
+  background-color: rgba(74, 222, 128, 0.12);
   color: #4ade80;
+  outline: none;
+}
+
+#nav-menu-button:hover #nav-menu-svg {
   transform: scale(1.05);
 }
 
 /* Mobile dropdown menu */
 #mobile-menu {
-  position: absolute;
-  top: 100%;
+  position: fixed;
+  top: var(--mobile-nav-height, 5.75rem);
   left: 0;
   right: 0;
   width: 100%;
@@ -116,6 +136,10 @@ button {
   gap: 1rem;
   z-index: 1000;
   transition: all 0.3s ease;
+}
+
+#mobile-menu[hidden] {
+  display: none !important;
 }
 
 #mobile-menu.active {
@@ -139,7 +163,7 @@ button {
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0,0,0,0.3);
+  background: rgba(15, 23, 42, 0.45);
   opacity: 0;
   pointer-events: none;
   transition: opacity 0.3s ease;
@@ -178,4 +202,37 @@ button {
   #nav-mobile {
     display: flex;
   }
+}
+
+.skip-button {
+  background-color: #334155;
+  color: #f8fafc;
+  border: 1px solid rgba(74, 222, 128, 0.2);
+
+  padding: 10px 14px;
+  border-radius: 8px;
+
+  font-size: 14px;
+  font-weight: 500;
+
+  cursor: pointer;
+
+  transition: background-color 0.2s ease, transform 0.1s ease, border-color 0.2s ease;
+}
+
+/* hover state */
+.skip-button:hover {
+  background-color: #4b5563;
+  border-color: rgba(74, 222, 128, 0.4);
+}
+
+/* click feedback */
+.skip-button:active {
+  transform: scale(0.97);
+}
+
+/* keyboard focus accessibility */
+.skip-button:focus-visible {
+  outline: 2px solid rgba(74, 222, 128, 0.6);
+  outline-offset: 2px;
 }
