@@ -64,27 +64,35 @@
 </section>
 
     <!-- STOCK TABLE -->
-    <table id="stock-table">
-        <thead>
-            <tr id="stock-table-header">
-                <td colspan="9" data-i18n="home_popular_stocks">Popular Stocks</td>
-            </tr>
-            <tr>
-                <th scope="col" data-i18n="home_col_symbol">Symbol</th>
-                <th scope="col" data-i18n="home_col_price">Price</th>
-                <th scope="col" data-i18n="home_col_change">Change</th>
-                <th scope="col" data-i18n="home_col_percent_change">% Change</th>
-                <th scope="col" data-i18n="home_col_high">High</th>
-                <th scope="col" data-i18n="home_col_low">Low</th>
-                <th scope="col" data-i18n="home_col_open">Open</th>
-                <th scope="col" data-i18n="home_col_prev_close">Prev Close</th>
-                <th scope="col" data-i18n="home_col_favorite">Favorite</th>
-            </tr>
-        </thead>
-        <tbody id="stock-table-body">
+    <main class="home-page">
+        <header class="page-header">
+            <h1 class="sr-only" data-i18n="home_popular_stocks">Popular Stocks</h1>
+        </header>
+        <div id="stock-table-wrapper">
+            <table id="stock-table">
+                <caption class="sr-only" data-i18n="home_table_caption">Popular stocks with current market pricing and favorite controls</caption>
+                <thead>
+                    <tr id="stock-table-header">
+                        <td colspan="9" data-i18n="home_popular_stocks">Popular Stocks</td>
+                    </tr>
+                    <tr>
+                        <th scope="col" data-i18n="home_col_symbol">Symbol</th>
+                        <th scope="col" data-i18n="home_col_price">Price</th>
+                        <th scope="col" data-i18n="home_col_change">Change</th>
+                        <th scope="col" data-i18n="home_col_percent_change">% Change</th>
+                        <th scope="col" data-i18n="home_col_high">High</th>
+                        <th scope="col" data-i18n="home_col_low">Low</th>
+                        <th scope="col" data-i18n="home_col_open">Open</th>
+                        <th scope="col" data-i18n="home_col_prev_close">Prev Close</th>
+                        <th scope="col" data-i18n="home_col_favorite">Favorite</th>
+                    </tr>
+                </thead>
+                <tbody id="stock-table-body">
 
-        </tbody>
-    </table>
+                </tbody>
+            </table>
+        </div>
+    </main>
     <script src="scripts/i18n.js"></script>
     <script src="scripts/API/config.js"></script>
     <script src="scripts/API/finnhubAPI.js"></script>

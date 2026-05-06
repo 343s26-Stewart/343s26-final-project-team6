@@ -391,6 +391,11 @@
 }
 
 @media screen and (max-width: 900px) {
+    .reports-page {
+        width: 100%;
+        padding: 1rem 0.85rem 2.5rem;
+    }
+
     .table-heading {
         display: none;
     }
@@ -447,5 +452,25 @@
     .report-cell,
     .holding-cell {
         flex-direction: column;
+    }
+}
+
+@media screen and (max-width: 640px) {
+    .reports-hero {
+        padding: 1.25rem 0.85rem;
+    }
+
+    .report-cell,
+    .holding-cell {
+        padding: 1rem 0.85rem;
+    }
+
+    .stock-company,
+    .stock-symbol,
+    .change-value,
+    .holding-name,
+    .holding-gain,
+    .portfolio-total {
+        word-break: break-word;
     }
 }
