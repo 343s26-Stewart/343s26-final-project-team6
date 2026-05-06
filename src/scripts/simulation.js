@@ -1,5 +1,4 @@
 document.addEventListener("DOMContentLoaded", () => {
-    setupChartFilterButtons();
     setupTradeButtons();
     setupChatbot();
     initializeSimulationPage();
@@ -10,27 +9,13 @@ const DEFAULT_WATCHLIST = ["AAPL", "MSFT", "NVDA", "TSLA"];
 let currentSymbol = "AAPL";
 let currentCompany = "Apple Inc";
 let currentQuote = null;
-let currentChartRange = "1D";
+const CHART_MODE = "default";
 
 function translate(key, params = {}) {
     if (window.I18N?.t) {
         return window.I18N.t(key, params);
     }
     return key;
-}
-
-function setupChartFilterButtons() {
-    const buttons = document.querySelectorAll(".chart-filter");
-
-    buttons.forEach((button) => {
-        button.addEventListener("click", async () => {
-            buttons.forEach((item) => item.classList.remove("active"));
-            button.classList.add("active");
-
-            currentChartRange = button.dataset.range;
-            await loadChartForCurrentSymbol();
-        });
-    });
 }
 
 function setupTradeButtons() {
@@ -141,21 +126,21 @@ async function loadChartForCurrentSymbol() {
         return;
     }
 
-    const chartData = buildQuoteBasedChartData(currentQuote, currentChartRange);
+    const chartData = buildQuoteBasedChartData(currentQuote);
 
     if (!chartData || chartData.prices.length < 2) {
         setTradeStatus(translate("simulation_chart_unavailable", { symbol: currentSymbol }));
         return;
     }
 
-    drawChart(chartData.prices, chartData.timestamps, currentChartRange);
+    drawChart(chartData.prices, chartData.timestamps, CHART_MODE);
     setTradeStatus(translate("simulation_showing_trend", {
-        range: currentChartRange,
+        range: "",
         symbol: currentSymbol
     }));
 }
 
-function buildQuoteBasedChartData(quote, range) {
+function buildQuoteBasedChartData(quote) {
     if (!quote) {
         return null;
     }
@@ -166,36 +151,18 @@ function buildQuoteBasedChartData(quote, range) {
     const low = getValidPrice(quote.l, Math.min(open, quote.c || open));
     const current = getValidPrice(quote.c, open);
 
-    let anchorPoints;
+    const monthStart = previousClose * 0.96;
+    const monthLow = Math.min(low, monthStart);
+    const monthHigh = Math.max(high, current * 1.015);
 
-    if (range === "1D") {
-        anchorPoints = buildQuoteAnchors(previousClose, open, low, high, current);
-    } else if (range === "1W") {
-        const weekStart = previousClose * 0.985;
-        const weekMid = (open + current) / 2;
-
-        anchorPoints = buildQuoteAnchors(
-            weekStart,
-            previousClose,
-            low,
-            weekMid,
-            high,
-            current
-        );
-    } else {
-        const monthStart = previousClose * 0.96;
-        const monthLow = Math.min(low, monthStart);
-        const monthHigh = Math.max(high, current * 1.015);
-
-        anchorPoints = buildQuoteAnchors(
-            monthStart,
-            previousClose,
-            open,
-            monthLow,
-            monthHigh,
-            current
-        );
-    }
+    const anchorPoints = buildQuoteAnchors(
+        monthStart,
+        previousClose,
+        open,
+        monthLow,
+        monthHigh,
+        current
+    );
 
     const prices = interpolateTrendPoints(anchorPoints, 25);
 
@@ -203,7 +170,7 @@ function buildQuoteBasedChartData(quote, range) {
         return null;
     }
 
-    const timestamps = buildTimestampsForRange(prices.length, range);
+    const timestamps = buildTimestampsForRange(prices.length);
 
     return {
         prices,
@@ -244,16 +211,9 @@ function interpolateTrendPoints(anchorPoints, totalPoints) {
     return points;
 }
 
-function buildTimestampsForRange(pointCount, range) {
+function buildTimestampsForRange(pointCount) {
     const now = Math.floor(Date.now() / 1000);
-
-    const stepByRange = {
-        "1D": 60 * 15,
-        "1W": 60 * 60 * 6,
-        "1M": 60 * 60 * 24
-    };
-
-    const step = stepByRange[range] || stepByRange["1D"];
+    const step = 60 * 60 * 24;
 
     return Array.from({ length: pointCount }, (_, index) => {
         return now - ((pointCount - 1 - index) * step);
@@ -288,7 +248,7 @@ function drawChart(prices, timestamps, range) {
     const min = Math.min(...points);
     const max = Math.max(...points);
 
-    const chartTop = 50;
+    const chartTop = 50;  
     const chartBottom = 260;
     const chartLeft = 70;
     const chartRight = 740;
@@ -303,7 +263,7 @@ function drawChart(prices, timestamps, range) {
             const y = chartBottom - ((price - min) / priceRange) * chartHeight;
 
             return `${x.toFixed(2)},${y.toFixed(2)}`;
-        })
+        }) 
         .join(" ");
 
     const lineColor = points[points.length - 1] >= points[0] ? "#4ade80" : "#f59e94";
@@ -337,21 +297,10 @@ function updateChartTimeLabels(timestamps, range) {
         return;
     }
 
-    const formatterByRange = {
-        "1D": new Intl.DateTimeFormat("en-US", {
-            hour: "numeric",
-            minute: "2-digit"
-        }),
-        "1W": new Intl.DateTimeFormat("en-US", {
-            weekday: "short"
-        }),
-        "1M": new Intl.DateTimeFormat("en-US", {
-            month: "short",
-            day: "numeric"
-        })
-    };
-
-    const formatter = formatterByRange[range] || formatterByRange["1D"];
+    const formatter = new Intl.DateTimeFormat("en-US", {
+        month: "short",
+        day: "numeric"
+    });
     const lastIndex = timestamps.length - 1;
 
     labels.forEach((label, labelIndex) => {
