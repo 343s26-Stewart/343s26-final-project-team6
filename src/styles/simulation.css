@@ -470,12 +470,21 @@ input:invalid {
     }
 }
 
-.skip-buttons-mobile {
-    display:none;
+.skip-links {
+    position: fixed;
+    top: 0.75rem;
+    left: 0.75rem;
+    z-index: 2000;
+    display: flex;
+    gap: 0.5rem;
+    opacity: 0;
+    transform: translateY(-140%);
+    transition: opacity 0.2s ease, transform 0.2s ease;
 }
 
-.skip-buttons-desktop {
-    display:block;
+.skip-links:focus-within {
+    opacity: 1;
+    transform: translateY(0);
 }
 
 
@@ -498,13 +507,6 @@ input:invalid {
         grid-template-columns: 1fr;
     }
 
-    .skip-buttons-desktop {
-        display:none;
-    }
-
-    .skip-buttons-mobile {
-        display:block;
-    }
 }
 
 @media (max-width: 640px) {
