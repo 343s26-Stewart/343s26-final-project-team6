@@ -1,4 +1,0 @@
-- name: Inject secrets
-  run: |
-    sed -i "s/GEMINI_KEY_PLACEHOLDER/${{ secrets.GEMINI_KEY }}/g" config.js
-    sed -i "s/FINNHUB_KEY_PLACEHOLDER/${{ secrets.FINNHUB_KEY }}/g" config.js
