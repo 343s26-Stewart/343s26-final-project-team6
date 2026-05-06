@@ -20,10 +20,12 @@
 
 .simulation-left {
     flex: 2;
+    min-width: 0;
 }
 
 .simulation-right {
     flex: 1;
+    min-width: 0;
 }
 
 .chart-card,
@@ -56,7 +58,7 @@
 }
 
 .muted-text {
-    color: #94a3b8;
+    color: #cbd5e1;
 }
 
 .price-badge {
@@ -65,7 +67,7 @@
 
 .price-label {
     display: block;
-    color: #94a3b8;
+    color: #cbd5e1;
     font-size: 0.85rem;
 }
 
@@ -102,6 +104,7 @@
 
 #price-chart {
     width: 100%;
+    min-width: 640px;
     height: auto;
     display: block;
 }
@@ -170,6 +173,8 @@
 .watchlist-item {
     display: flex;
     justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
     gap: 1rem;
     padding: 0.75rem;
     background-color: #111c30;
@@ -182,7 +187,7 @@
 .watchlist-company,
 .empty-message,
 .status-text {
-    color: #94a3b8;
+    color: #cbd5e1;
 }
 
 .selected-stock-box {
@@ -349,17 +354,17 @@ input:invalid {
     gap: 0.5rem;
 }
 
+.chatbot-input-row input {
+    min-width: 0;
+    flex: 1;
+}
+
 .site-footer {
     width: 94%;
     margin: 0 auto;
     padding-bottom: 2rem;
     text-align: center;
     color: #94a3b8;
-}
-
-.sr-only {
-    position: absolute;
-    left: -9999px;
 }
 
 /* I18: CSS transitions and animations for improved user experience */
@@ -475,8 +480,18 @@ input:invalid {
 
 
 @media (max-width: 980px) {
+    .simulation-page {
+        width: min(100%, 960px);
+        padding: 1rem 0.85rem 6rem;
+    }
+
     .simulation-layout {
         flex-direction: column;
+    }
+
+    .simulation-left,
+    .simulation-right {
+        width: 100%;
     }
 
     .simulation-summary-row {
@@ -486,12 +501,24 @@ input:invalid {
     .skip-buttons-desktop {
         display:none;
     }
+
     .skip-buttons-mobile {
         display:block;
     }
 }
 
 @media (max-width: 640px) {
+    #stock-title {
+        font-size: 1.55rem;
+    }
+
+    .chart-card,
+    .side-card,
+    .summary-card,
+    .trade-log-card,
+    .chatbot-panel {
+        padding: 0.9rem;
+    }
 
     .chart-header,
     .trade-buttons,
@@ -499,9 +526,44 @@ input:invalid {
         flex-direction: column;
     }
 
+    .price-badge,
+    .stock-meta-line,
+    .trade-log-item,
+    .watchlist-item {
+        align-items: flex-start;
+    }
+
+    .stock-meta-line,
+    .trade-log-item,
+    .watchlist-item {
+        flex-direction: column;
+    }
+
+    #price-chart {
+        min-width: 560px;
+    }
+
     .buy-button,
     .sell-button,
     .chatbot-input-row button {
         width: 100%;
+    }
+
+    .chatbot-toggle {
+        left: auto;
+        right: 1rem;
+        bottom: 1rem;
+    }
+
+    .chatbot-panel {
+        left: 0.85rem;
+        right: 0.85rem;
+        bottom: 5.9rem;
+        width: auto;
+        max-height: min(70vh, 520px);
+    }
+
+    .chatbot-messages {
+        height: min(42vh, 300px);
     }
 }

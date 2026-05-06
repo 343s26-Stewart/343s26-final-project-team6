@@ -29,6 +29,29 @@ function updateFavoriteIcon(button, isFavorite) {
   }
 }
 
+function getStockColumnLabels() {
+  return [
+    translate("home_col_symbol"),
+    translate("home_col_price"),
+    translate("home_col_change"),
+    translate("home_col_percent_change"),
+    translate("home_col_high"),
+    translate("home_col_low"),
+    translate("home_col_open"),
+    translate("home_col_prev_close"),
+    translate("home_col_favorite")
+  ];
+}
+
+function applyMobileCellLabels(row) {
+  const cells = row.querySelectorAll("td");
+  const labels = getStockColumnLabels();
+
+  cells.forEach((cell, index) => {
+    cell.dataset.label = labels[index] || "";
+  });
+}
+
 async function loadHome() {
   const tbody = document.getElementById('stock-table-body');
 
@@ -47,6 +70,7 @@ async function loadHome() {
       <td><div class="spinner"></div></td>
       <td><div class="spinner"></div></td>
     `;
+    applyMobileCellLabels(row);
     tbody.appendChild(row);
   }
 
@@ -82,6 +106,7 @@ async function loadHome() {
         <td>${quote.pc.toFixed(2)}</td>
         <td><button class="fav-btn">${translate("home_favorite_button")}</button></td>
       `;
+      applyMobileCellLabels(row);
 
       const favBtn = row.querySelector(".fav-btn");
       //Check if stock is a favorite and update button style accordingly
