@@ -77,13 +77,8 @@
                         </div>
                     </div>
 
-                    <div class="chart-toolbar">
-                        <button class="chart-filter active" type="button" data-range="1D">1D</button>
-                        <button class="chart-filter" type="button" data-range="1W">1W</button>
-                        <button class="chart-filter" type="button" data-range="1M">1M</button>
-                    </div>
-
-                    <div class="chart-area">
+                    <div class="chart-area" tabindex="0" role="region"
+                        aria-label="Scrollable stock trend chart" data-i18n-aria-label="simulation_chart_region_aria">
                         <svg id="price-chart" viewBox="0 0 800 320" role="img" aria-label="Stock trend chart" data-i18n-aria-label="simulation_chart_aria">
                             <rect x="0" y="0" width="800" height="320" rx="14" class="chart-bg"></rect>
 
@@ -193,7 +188,7 @@
         <!-- CHATBOT -->
         <button id="chatbot-toggle" class="chatbot-toggle" type="button" aria-expanded="false"
             aria-label="Open chatbot" data-i18n-aria-label="simulation_open_chatbot">
-            <img src="assets/chatbot.jpeg" alt="" class="chatbot-icon" />
+            <img src="assets/chatbot.jpeg" alt="chatbot logo" class="chatbot-icon" />
             <span class="sr-only" data-i18n="simulation_open_chatbot">Open chatbot</span>
         </button>
 
@@ -203,7 +198,8 @@
                 <button id="chatbot-close" type="button" aria-label="Close chatbot" data-i18n-aria-label="simulation_close_chatbot">×</button>
             </div>
 
-            <div id="chatbot-messages" class="chatbot-messages">
+            <div id="chatbot-messages" class="chatbot-messages" tabindex="0" role="log" aria-live="polite"
+                aria-label="Chatbot conversation messages" data-i18n-aria-label="simulation_chat_messages_aria">
                 <div class="bot-message">
                     <span data-i18n="simulation_chat_intro">Ask about this stock or the simulator. Try:</span>
                     <br />

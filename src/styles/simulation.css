@@ -102,6 +102,13 @@
     overflow-x: auto;
 }
 
+.chart-area:focus-visible,
+.chatbot-messages:focus-visible {
+    outline: 3px solid rgba(74, 222, 128, 0.8);
+    outline-offset: 3px;
+    border-radius: 10px;
+}
+
 #price-chart {
     width: 100%;
     min-width: 640px;
