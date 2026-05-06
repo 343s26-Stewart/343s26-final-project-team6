@@ -266,3 +266,81 @@
         transform: rotate(360deg);
     }
 }
+
+#home-search-section {
+    width: 94%;
+    margin: 1.5rem auto 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+#search-bar-wrap {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+    background-color: #0f172a;
+    border: 1px solid #334155;
+    border-radius: 10px;
+    padding: 0.5rem;
+}
+
+#stock-search-input {
+    flex: 1;
+    background: transparent;
+    border: none;
+    outline: none;
+    color: #f8fafc;
+    font-size: 0.95rem;
+    padding: 0.5rem 0.75rem;
+}
+
+#stock-search-input::placeholder {
+    color: #64748b;
+}
+
+/* Buttons */
+#stock-search-btn,
+#stock-clear-btn {
+    border: 1px solid #334155;
+    background-color: #111c30;
+    color: #94a3b8;
+    padding: 0.45rem 0.75rem;
+    border-radius: 8px;
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+
+#stock-search-btn:hover {
+    border-color: #4ade80;
+    color: #4ade80;
+}
+
+#stock-clear-btn:hover {
+    border-color: #f87171;
+    color: #f87171;
+}
+
+/* Search status message */
+#search-message {
+    font-size: 0.85rem;
+    color: #94a3b8;
+    padding-left: 0.25rem;
+}
+
+/* Focus state for input */
+#stock-search-input:focus {
+    outline: none;
+}
+
+/* subtle glow when active */
+#search-bar-wrap:focus-within {
+    border-color: #4ade80;
+    box-shadow: 0 0 0 2px rgba(74, 222, 128, 0.1);
+}
+
+#stock-table {
+    margin-left: auto;
+    margin-right: auto;
+}

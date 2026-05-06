@@ -120,7 +120,7 @@ async function loadHome() {
 
       tbody.appendChild(row);
     }
-//Error checking
+    //Error checking
   } catch (err) {
     const table = document.getElementById("stock-table");
     const errorMessage = document.createElement('p');
@@ -142,10 +142,166 @@ async function loadHome() {
   }
 }
 
-document.addEventListener("languageChanged", () => {
-  document.querySelectorAll(".fav-btn").forEach((button) => {
-    button.textContent = translate("home_favorite_button");
+async function runSearch() {
+  const input = document.getElementById("stock-search-input");
+  const message = document.getElementById("search-message");
+  const tbody = document.getElementById("stock-table-body");
+
+  const query = input.value.trim();
+
+  if (!query) {
+    setDefaultTableMode();
+    loadHome();
+    return;
+  }
+
+  setSearchTableMode();
+  message.textContent = "Searching...";
+  tbody.innerHTML = "";
+
+  try {
+    const results = await searchSymbol(query);
+
+    if (!results.result || results.result.length === 0) {
+      message.textContent = "Invalid search";
+      return;
+    }
+
+    // Use first result only (API limits)
+    const match = results.result[0];
+    const symbol = match.symbol;
+
+    const [profile, quote] = await Promise.all([
+      getProfile(symbol),
+      getQuote(symbol)
+    ]);
+
+    if (!profile || !profile.ticker) {
+      message.textContent = "Invalid search";
+      return;
+    }
+
+    message.textContent = "";
+
+    tbody.innerHTML = "";
+
+   const row = document.createElement("tr");
+
+row.innerHTML = `
+  <td>
+    <div style="display:flex; align-items:center; gap:10px;">
+      <img src="${profile.logo}" width="28" height="28"
+           style="border-radius:50%; background:white; object-fit:contain;">
+      <div>
+        <div style="font-weight:600;">${profile.name}</div>
+        <div style="font-size:12px;color:#94a3b8;">${profile.ticker}</div>
+      </div>
+    </div>
+  </td>
+
+  <td>${profile.finnhubIndustry || "—"}</td>
+  <td>${profile.exchange || "—"}</td>
+
+  <td>${quote.c ? quote.c.toFixed(2) : "—"}</td>
+
+  <td>
+    <a href="${profile.weburl}" target="_blank"
+       style="color:#4ade80; text-decoration:none;">
+      Visit →
+    </a>
+  </td>
+
+  <td>
+    <button class="fav-btn">
+      ${translate("home_favorite_button")}
+    </button>
+  </td>
+`;
+
+    const favBtn = row.querySelector(".fav-btn");
+
+    updateFavoriteIcon(
+      favBtn,
+      getFavorites().includes(symbol)
+    );
+
+    favBtn.addEventListener("click", () => {
+      toggleFavorite(symbol);
+      updateFavoriteIcon(
+        favBtn,
+        getFavorites().includes(symbol)
+      );
+    });
+
+    tbody.appendChild(row);
+
+  } catch (err) {
+    message.textContent = "Invalid search";
+  }
+}
+
+function setupSearch() {
+  const input = document.getElementById("stock-search-input");
+  const searchBtn = document.getElementById("stock-search-btn");
+  const clearBtn = document.getElementById("stock-clear-btn");
+
+  searchBtn.addEventListener("click", runSearch);
+
+  input.addEventListener("keydown", (e) => {
+    if (e.key === "Enter") {
+      runSearch();
+    }
   });
+
+  clearBtn.addEventListener("click", () => {
+  input.value = "";
+  document.getElementById("search-message").textContent = "";
+
+  setDefaultTableMode();
+  loadHome();
+});
+}
+
+function setSearchTableMode() {
+  const headerRow = document.querySelector("#stock-table thead tr:nth-child(2)");
+  const titleRow = document.getElementById("stock-table-header");
+
+  titleRow.innerHTML = `<td colspan="6">Search Result</td>`;
+
+  headerRow.innerHTML = `
+    <th>Company</th>
+    <th>Industry</th>
+    <th>Exchange</th>
+    <th>Price</th>
+    <th>Website</th>
+    <th>Favorite</th>
+  `;
+}
+
+function setDefaultTableMode() {
+  const headerRow = document.querySelectorAll("#stock-table thead tr")[1];
+  const titleRow = document.getElementById("stock-table-header");
+
+  if (!headerRow || !titleRow) return;
+
+  titleRow.innerHTML = `<td colspan="9">Popular Stocks</td>`;
+
+  headerRow.innerHTML = `
+    <th>Symbol</th>
+    <th>Price</th>
+    <th>Change</th>
+    <th>% Change</th>
+    <th>High</th>
+    <th>Low</th>
+    <th>Open</th>
+    <th>Prev Close</th>
+    <th>Favorite</th>
+  `;
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  setDefaultTableMode();
+  loadHome();
+  setupSearch();
 });
 
-document.addEventListener('DOMContentLoaded', loadHome);
