@@ -5,17 +5,33 @@ on:
     branches:
       - main
       - test-deploy
+  workflow_dispatch:
+
+permissions:
+  contents: write
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - name: Checkout
+        uses: actions/checkout@v4
 
-      - name: Inject secrets
+      - name: Generate API config
+        env:
+          FINNHUB_KEY: ${{ secrets.FINNHUB_KEY }}
+          FINNHUB_ROOT: ${{ secrets.FINNHUB_ROOT }}
+          GEMINI_KEY: ${{ secrets.GEMINI_KEY }}
+          GEMINI_ROOT: ${{ secrets.GEMINI_ROOT }}
         run: |
-          sed -i "s/GEMINI_KEY_PLACEHOLDER/${{ secrets.GEMINI_KEY }}/g" config.js
-          sed -i "s/FINNHUB_KEY_PLACEHOLDER/${{ secrets.FINNHUB_KEY }}/g" config.js
+          cat > src/scripts/API/config.js <<EOF
+          const config = {
+            finnhubKey: "${FINNHUB_KEY}",
+            finnhubRoot: "${FINNHUB_ROOT:-https://finnhub.io/api/v1}",
+            geminiKey: "${GEMINI_KEY}",
+            geminiRoot: "${GEMINI_ROOT:-https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash}",
+          };
+          EOF
 
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v3
