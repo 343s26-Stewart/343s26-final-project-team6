@@ -13,11 +13,6 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Inject secrets into config
-        run: |
-          sed -i "s|GEMINI_KEY_PLACEHOLDER|${{ secrets.GEMINI_KEY }}|g" src/scripts/API/config.js
-          sed -i "s|FINNHUB_KEY_PLACEHOLDER|${{ secrets.FINNHUB_KEY }}|g" src/scripts/API/config.js
-
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
         with:
