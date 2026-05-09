@@ -1,0 +1,268 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+html, body {
+  min-height: 100%;
+  font-family: Arial, Helvetica, sans-serif;
+  background-color: #1D293B;
+  color: #f8fafc;
+  overflow-x: hidden;
+}
+
+body {
+  line-height: 1.6;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+button {
+  font: inherit;
+  border: none;
+  background: none;
+  cursor: pointer;
+}
+
+/* GLOBAL NAV STYLES */
+#site-header {
+  position: relative;
+  z-index: 100;
+  width: 100%;
+}
+
+#nav-desktop,
+#nav-mobile {
+  width: 100%;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 1.75rem 2rem;
+  justify-content: space-between;
+  align-items: center;
+}
+
+#nav-mobile {
+  position: relative;
+  z-index: 1100;
+}
+
+#nav-desktop-links {
+  display: flex;
+  align-items: center;
+}
+
+.language-picker {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  color: #cbd5e1;
+  font-size: 0.9rem;
+}
+
+.language-select {
+  border: 1px solid #475569;
+  border-radius: 6px;
+  background-color: #1e293b;
+  color: #f8fafc;
+  padding: 0.15rem 0.45rem;
+}
+
+.mobile-language-picker {
+  width: fit-content;
+  margin-top: 0.4rem;
+}
+
+#logo {
+  font-size: 1.25rem;
+  font-weight: 700;
+  letter-spacing: 0.2px;
+  color: #4ade80;
+}
+
+.nav-link {
+  font-size: 0.95rem;
+  color: #cbd5e1;
+  padding: 0 2rem;
+  transition: color 0.2s ease;
+}
+
+.nav-link:hover {
+  color: #4ade80;
+}
+
+/* MOBILE NAV BUTTON */
+#nav-menu-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 2.75rem;
+  min-height: 2.75rem;
+  padding: 0.5rem;
+  border-radius: 6px;
+  color: #cbd5e1;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+#nav-menu-svg {
+  display: block;
+  transition: color 0.2s ease, transform 0.2s ease;
+}
+
+#nav-menu-button:hover,
+#nav-menu-button.active,
+#nav-menu-button:focus-visible {
+  background-color: rgba(74, 222, 128, 0.12);
+  color: #4ade80;
+  outline: none;
+}
+
+#nav-menu-button:hover #nav-menu-svg {
+  transform: scale(1.05);
+}
+
+/* Mobile dropdown menu */
+#mobile-menu {
+  position: fixed;
+  top: var(--mobile-nav-height, 5.75rem);
+  left: 0;
+  right: 0;
+  width: 100%;
+  background-color: #1D293B;
+  flex-direction: column;
+  display: none;
+  padding: 1rem 2rem;
+  gap: 1rem;
+  z-index: 1000;
+  transition: all 0.3s ease;
+}
+
+#mobile-menu[hidden] {
+  display: none !important;
+}
+
+#mobile-menu.active {
+  display: flex;
+}
+
+.mobile-menu-link {
+  color: #cbd5e1;
+  font-size: 1rem;
+  transition: color 0.2s ease;
+}
+
+.mobile-menu-link:hover {
+  color: #4ade80;
+}
+
+/* Optional: semi-transparent overlay behind menu */
+#mobile-menu-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(15, 23, 42, 0.45);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+  z-index: 900;
+}
+
+#mobile-menu-overlay.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+#nav-desktop {
+  display: none;
+}
+
+#nav-mobile {
+  display: flex;
+}
+
+@media screen and (min-width: 900px) {
+  #nav-mobile,
+  #mobile-menu {
+    display: none !important;
+  }
+
+  #nav-desktop {
+    display: flex;
+  }
+}
+
+@media screen and (max-width: 899px) {
+  #nav-desktop {
+    display: none;
+  }
+
+  #nav-mobile {
+    display: flex;
+    padding: 1rem 1rem 0.9rem;
+  }
+
+  #mobile-menu {
+    padding: 1rem;
+  }
+
+  #logo {
+    font-size: 1.1rem;
+  }
+}
+
+.skip-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #334155;
+  color: #f8fafc;
+  border: 1px solid rgba(74, 222, 128, 0.2);
+
+  padding: 10px 14px;
+  border-radius: 8px;
+
+  font-size: 14px;
+  font-weight: 500;
+
+  cursor: pointer;
+
+  transition: background-color 0.2s ease, transform 0.1s ease, border-color 0.2s ease;
+}
+
+/* hover state */
+.skip-button:hover {
+  background-color: #4b5563;
+  border-color: rgba(74, 222, 128, 0.4);
+}
+
+/* click feedback */
+.skip-button:active {
+  transform: scale(0.97);
+}
+
+/* keyboard focus accessibility */
+.skip-button:focus-visible {
+  outline: 2px solid rgba(74, 222, 128, 0.6);
+  outline-offset: 2px;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}

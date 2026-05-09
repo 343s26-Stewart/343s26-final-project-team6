@@ -1,0 +1,578 @@
+.simulation-page {
+    width: 94%;
+    margin: 0 auto;
+    padding: 1.5rem 0 3rem;
+    position: relative;
+}
+
+.simulation-layout {
+    display: flex;
+    gap: 1rem;
+    align-items: flex-start;
+}
+
+.simulation-left,
+.simulation-right {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.simulation-left {
+    flex: 2;
+    min-width: 0;
+}
+
+.simulation-right {
+    flex: 1;
+    min-width: 0;
+}
+
+.chart-card,
+.side-card,
+.summary-card,
+.trade-log-card,
+.chatbot-panel {
+    background-color: #0f172a;
+    border: 1px solid #334155;
+    border-radius: 10px;
+    padding: 1rem;
+}
+
+.chart-header {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.eyebrow {
+    color: #4ade80;
+    font-size: 0.9rem;
+    font-weight: bold;
+}
+
+#stock-title {
+    font-size: 2rem;
+    margin: 0.25rem 0;
+}
+
+.muted-text {
+    color: #cbd5e1;
+}
+
+.price-badge {
+    text-align: right;
+}
+
+.price-label {
+    display: block;
+    color: #cbd5e1;
+    font-size: 0.85rem;
+}
+
+#current-price {
+    font-size: 1.3rem;
+    font-weight: bold;
+    color: #4ade80;
+}
+
+.chart-toolbar {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+.chart-filter {
+    padding: 0.45rem 0.8rem;
+    border-radius: 999px;
+    background-color: #1e293b;
+    color: #f8fafc;
+    border: 1px solid #334155;
+}
+
+.chart-filter.active {
+    background-color: #4ade80;
+    color: #0f172a;
+    font-weight: bold;
+}
+
+.chart-area {
+    width: 100%;
+    overflow-x: auto;
+}
+
+.chart-area:focus-visible,
+.chatbot-messages:focus-visible {
+    outline: 3px solid rgba(74, 222, 128, 0.8);
+    outline-offset: 3px;
+    border-radius: 10px;
+}
+
+#price-chart {
+    width: 100%;
+    min-width: 640px;
+    height: auto;
+    display: block;
+}
+
+.chart-bg {
+    fill: #111827;
+}
+
+.grid-line {
+    stroke: #334155;
+    stroke-width: 1;
+    stroke-dasharray: 4 6;
+}
+
+.axis-line {
+    stroke: #64748b;
+    stroke-width: 1.5;
+}
+
+.chart-label,
+.time-label {
+    fill: #94a3b8;
+    font-size: 14px;
+}
+
+#chart-line {
+    stroke: #f59e94;
+    transition: stroke 0.25s ease;
+}
+
+.simulation-summary-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+}
+
+.summary-label {
+    color: #94a3b8;
+    margin-bottom: 0.4rem;
+}
+
+.summary-value {
+    font-size: 1.3rem;
+    font-weight: bold;
+}
+
+.pnl-positive {
+    color: #4ade80;
+}
+
+.pnl-negative {
+    color: #f87171;
+}
+
+.panel-header {
+    margin-bottom: 0.75rem;
+}
+
+.trade-log {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.trade-log-item,
+.watchlist-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+    padding: 0.75rem;
+    background-color: #111c30;
+    border: 1px solid #334155;
+    border-radius: 8px;
+}
+
+.trade-log-left span,
+.trade-log-right,
+.watchlist-company,
+.empty-message,
+.status-text {
+    color: #cbd5e1;
+}
+
+.selected-stock-box {
+    display: flex;
+    flex-direction: column;
+    gap: 0.7rem;
+}
+
+.stock-meta-line {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+}
+
+.watchlist {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.watchlist-left {
+    display: flex;
+    flex-direction: column;
+}
+
+.watchlist-symbol {
+    font-weight: bold;
+}
+
+.watchlist-load,
+.buy-button,
+.sell-button,
+.chatbot-input-row button {
+    padding: 0.6rem 0.9rem;
+    border-radius: 8px;
+    font-weight: bold;
+}
+
+.watchlist-load {
+    background-color: #334155;
+    color: #f8fafc;
+}
+
+.trade-form {
+    display: flex;
+    flex-direction: column;
+    gap: 0.7rem;
+}
+
+.trade-form label {
+    font-weight: bold;
+}
+
+.trade-form input,
+.chatbot-input-row input {
+    padding: 0.8rem;
+    border-radius: 8px;
+    border: 1px solid #475569;
+    background-color: #1e293b;
+    color: #f8fafc;
+}
+
+input:invalid {
+    border: 1px solid #be0202;
+    background-color: #db7272;
+}
+
+.trade-buttons {
+    display: flex;
+    gap: 0.75rem;
+    margin-top: 0.4rem;
+}
+
+.buy-button {
+    background-color: #b7f1bf;
+    color: #0f172a;
+}
+
+.sell-button {
+    background-color: #dc2626;
+    color: white;
+}
+
+.chatbot-toggle {
+    position: fixed;
+    left: 1rem;
+    bottom: 1rem;
+    width: 65px;
+    height: 65px;
+    border-radius: 50%;
+    background-color: #93c5fd;
+    color: transparent;
+    font-weight: bold;
+    border: none;
+    padding: 0;
+    display: grid;
+    place-items: center;
+    overflow: hidden;
+    z-index: 1000;
+}
+
+.chatbot-toggle .chatbot-icon {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.chatbot-panel {
+    position: fixed;
+    left: 1rem;
+    bottom: 5.8rem;
+    width: min(340px, calc(100vw - 2rem));
+    display: none;
+    flex-direction: column;
+    z-index: 1000;
+}
+
+.chatbot-panel.open {
+    display: flex;
+}
+
+.chatbot-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.75rem;
+}
+
+#chatbot-close {
+    font-size: 1.3rem;
+    color: #f8fafc;
+}
+
+.chatbot-messages {
+    height: 340px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    margin-bottom: 0.75rem;
+}
+
+.bot-message,
+.user-message {
+    padding: 0.75rem;
+    border-radius: 8px;
+    max-width: 90%;
+}
+
+.bot-message {
+    background-color: #1e293b;
+    color: #f8fafc;
+}
+
+.user-message {
+    background-color: #4ade80;
+    color: #0f172a;
+    align-self: flex-end;
+}
+
+.chatbot-input-row {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.chatbot-input-row input {
+    min-width: 0;
+    flex: 1;
+}
+
+.site-footer {
+    width: 94%;
+    margin: 0 auto;
+    padding-bottom: 2rem;
+    text-align: center;
+    color: #94a3b8;
+}
+
+/* I18: CSS transitions and animations for improved user experience */
+.chart-card,
+.side-card,
+.summary-card,
+.trade-log-card,
+.trade-log-item,
+.watchlist-item {
+    transition: transform 0.18s ease, box-shadow 0.22s ease, border-color 0.22s ease, background-color 0.22s ease;
+}
+
+.chart-filter,
+.watchlist-load,
+.buy-button,
+.sell-button,
+.chatbot-toggle,
+.chatbot-input-row button,
+#chatbot-close {
+    transition: transform 0.15s ease, opacity 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease, color 0.2s ease;
+}
+
+.trade-form input,
+.chatbot-input-row input {
+    transition: border-color 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+}
+
+.chart-filter:hover,
+.watchlist-load:hover,
+.buy-button:hover,
+.sell-button:hover,
+.chatbot-toggle:hover,
+.chatbot-input-row button:hover,
+#chatbot-close:hover {
+    transform: translateY(-2px);
+    opacity: 0.96;
+}
+
+.chart-filter:active,
+.watchlist-load:active,
+.buy-button:active,
+.sell-button:active,
+.chatbot-toggle:active,
+.chatbot-input-row button:active,
+#chatbot-close:active {
+    transform: scale(0.97);
+}
+
+.watchlist-item:hover,
+.trade-log-item:hover,
+.summary-card:hover,
+.side-card:hover {
+    transform: translateY(-2px);
+    border-color: #4ade80;
+    box-shadow: 0 10px 24px rgba(74, 222, 128, 0.12);
+}
+
+.chart-filter:hover {
+    box-shadow: 0 10px 24px rgba(74, 222, 128, 0.18);
+}
+
+.watchlist-load:hover {
+    box-shadow: 0 10px 24px rgba(248, 250, 252, 0.1);
+}
+
+.buy-button:hover {
+    box-shadow: 0 10px 24px rgba(183, 241, 191, 0.25);
+}
+
+.sell-button:hover {
+    box-shadow: 0 10px 24px rgba(220, 38, 38, 0.25);
+}
+
+.chatbot-toggle:hover {
+    box-shadow: 0 10px 24px rgba(147, 197, 253, 0.25);
+}
+
+.chatbot-input-row button:hover {
+    box-shadow: 0 10px 24px rgba(74, 222, 128, 0.18);
+}
+
+.trade-form input:focus,
+.chatbot-input-row input:focus {
+    outline: none;
+    border-color: #4ade80;
+    box-shadow: 0 0 0 3px rgba(74, 222, 128, 0.16);
+}
+
+.chatbot-panel.open {
+    display: flex;
+    animation: chatbotSlideIn 0.22s ease;
+}
+
+@keyframes chatbotSlideIn {
+    from {
+        opacity: 0;
+        transform: translateY(12px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.skip-links {
+    position: fixed;
+    top: 0.75rem;
+    left: 0.75rem;
+    z-index: 2000;
+    display: flex;
+    gap: 0.5rem;
+    opacity: 0;
+    transform: translateY(-140%);
+    transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.skip-links:focus-within {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+
+@media (max-width: 980px) {
+    .simulation-page {
+        width: min(100%, 960px);
+        padding: 1rem 0.85rem 6rem;
+    }
+
+    .simulation-layout {
+        flex-direction: column;
+    }
+
+    .simulation-left,
+    .simulation-right {
+        width: 100%;
+    }
+
+    .simulation-summary-row {
+        grid-template-columns: 1fr;
+    }
+
+}
+
+@media (max-width: 640px) {
+    #stock-title {
+        font-size: 1.55rem;
+    }
+
+    .chart-card,
+    .side-card,
+    .summary-card,
+    .trade-log-card,
+    .chatbot-panel {
+        padding: 0.9rem;
+    }
+
+    .chart-header,
+    .trade-buttons,
+    .chatbot-input-row {
+        flex-direction: column;
+    }
+
+    .price-badge,
+    .stock-meta-line,
+    .trade-log-item,
+    .watchlist-item {
+        align-items: flex-start;
+    }
+
+    .stock-meta-line,
+    .trade-log-item,
+    .watchlist-item {
+        flex-direction: column;
+    }
+
+    #price-chart {
+        min-width: 560px;
+    }
+
+    .buy-button,
+    .sell-button,
+    .chatbot-input-row button {
+        width: 100%;
+    }
+
+    .chatbot-toggle {
+        left: auto;
+        right: 1rem;
+        bottom: 1rem;
+    }
+
+    .chatbot-panel {
+        left: 0.85rem;
+        right: 0.85rem;
+        bottom: 5.9rem;
+        width: auto;
+        max-height: min(70vh, 520px);
+    }
+
+    .chatbot-messages {
+        height: min(42vh, 300px);
+    }
+}

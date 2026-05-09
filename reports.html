@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Security-Policy" 
+      content="connect-src 'self' https://fragrant-river-a7de.richforeverrr6.workers.dev;">
+    <title>StalkStocks | Reports</title>
+    <link rel="stylesheet" href="./styles/globals.css">
+    <link rel="stylesheet" href="./styles/reports.css">
+</head>
+
+<body>
+    <nav id="nav-desktop">
+        <a href="index.html" id="logo">StalkStocks</a>
+        <div id="nav-desktop-links">
+            <a href="home.html" class="nav-link" data-i18n="nav_home">Home</a>
+            <a href="simulation.html" class="nav-link" data-i18n="nav_simulation">Simulation</a>
+            <a href="reports.html" class="nav-link" data-i18n="nav_reports">Reports</a>
+            <label class="language-picker">
+                <span data-i18n="lang_label">Language</span>
+                <select class="language-select" aria-label="Language">
+                    <option value="en" data-i18n="lang_en">English</option>
+                    <option value="es" data-i18n="lang_es">Spanish</option>
+                </select>
+            </label>
+        </div>
+    </nav>
+
+    <nav id="nav-mobile">
+        <a href="index.html" id="logo">StalkStocks</a>
+        <button id="nav-menu-button" aria-label="Open menu" data-i18n-aria-label="nav_open_menu">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" id="nav-menu-svg">
+                <path d="M4 5h16" />
+                <path d="M4 12h16" />
+                <path d="M4 19h16" />
+            </svg>
+        </button>
+    </nav>
+
+    <div id="mobile-menu">
+        <a href="home.html" class="mobile-menu-link" data-i18n="nav_home">Home</a>
+        <a href="simulation.html" class="mobile-menu-link" data-i18n="nav_simulation">Simulation</a>
+        <a href="reports.html" class="mobile-menu-link" data-i18n="nav_reports">Reports</a>
+        <label class="language-picker mobile-language-picker">
+            <span data-i18n="lang_label">Language</span>
+            <select class="language-select" aria-label="Language">
+                <option value="en" data-i18n="lang_en">English</option>
+                <option value="es" data-i18n="lang_es">Spanish</option>
+            </select>
+        </label>
+    </div>
+
+    <main class="reports-page">
+        <section class="reports-hero">
+            <p class="reports-kicker" data-i18n="reports_kicker">Performance Snapshot</p>
+            <h1 data-i18n="reports_title">Welcome to the Reports Page.</h1>
+            <p class="reports-subtitle" data-i18n="reports_subtitle">Here you can see how your favorite stocks and simulated trades have been doing.</p>
+        </section>
+
+        <section class="reports-card">
+            <div class="reports-toolbar">
+                <h2 data-i18n="reports_saved_stocks">Saved Stocks</h2>
+                <button id="market-view-toggle" class="view-toggle-button" type="button" data-i18n="reports_toggle_card">Card View</button>
+            </div>
+            <div id="market-report-header" class="table-heading reports-grid reports-grid-header">
+                <span data-i18n="reports_market_col_name">Stock Name</span>
+                <span data-i18n="reports_market_col_month">Past Month Activity</span>
+                <span data-i18n="reports_market_col_change">24 Hour Change</span>
+            </div>
+            <div id="market-report-table" class="reports-table-body">
+                <p class="reports-status" data-i18n="reports_loading_saved">Loading saved stocks...</p>
+            </div>
+        </section>
+
+        <section class="portfolio-summary">
+            <h2 data-i18n="reports_loss_gain_title">Loss/Gain Per Trade</h2>
+            <p id="total-gain-loss" class="portfolio-total">Total Gain/Loss: $0.00 USD</p>
+        </section>
+
+        <section class="reports-card">
+            <h2 class="sr-only" data-i18n="reports_portfolio_holdings">Portfolio Holdings</h2>
+            <div class="table-heading holdings-grid reports-grid-header">
+                <span data-i18n="reports_holdings_col_name">Stock Name</span>
+                <span data-i18n="reports_holdings_col_gain">Your Loss / Gain</span>
+            </div>
+            <div id="portfolio-report-table" class="reports-table-body">
+                <p class="reports-status" data-i18n="reports_loading_portfolio">Calculating portfolio performance...</p>
+            </div>
+        </section>
+    </main>
+
+    <script src="./scripts/i18n.js"></script>
+    <script src="./scripts/API/config.js"></script>
+    <script src="./scripts/API/finnhubAPI.js"></script>
+    <script src="./scripts/mobile-nav.js"></script>
+    <script src="./scripts/reports.js"></script>
+</body>
+
+</html>
