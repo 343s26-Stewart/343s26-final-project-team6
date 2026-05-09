@@ -9,7 +9,6 @@ const DEFAULT_WATCHLIST = ["AAPL", "MSFT", "NVDA", "TSLA"];
 let currentSymbol = "AAPL";
 let currentCompany = "Apple Inc";
 let currentQuote = null;
-const CHART_MODE = "default";
 
 function translate(key, params = {}) {
     if (window.I18N?.t) {
@@ -133,7 +132,7 @@ async function loadChartForCurrentSymbol() {
         return;
     }
 
-    drawChart(chartData.prices, chartData.timestamps, CHART_MODE);
+    drawChart(chartData.prices, chartData.isUptrending);
     setTradeStatus(translate("simulation_showing_trend", {
         range: "",
         symbol: currentSymbol
@@ -170,11 +169,9 @@ function buildQuoteBasedChartData(quote) {
         return null;
     }
 
-    const timestamps = buildTimestampsForRange(prices.length);
-
     return {
         prices,
-        timestamps
+        isUptrending: current >= previousClose
     };
 }
 
@@ -211,15 +208,6 @@ function interpolateTrendPoints(anchorPoints, totalPoints) {
     return points;
 }
 
-function buildTimestampsForRange(pointCount) {
-    const now = Math.floor(Date.now() / 1000);
-    const step = 60 * 60 * 24;
-
-    return Array.from({ length: pointCount }, (_, index) => {
-        return now - ((pointCount - 1 - index) * step);
-    });
-}
-
 function getValidPrice(value, fallback) {
     const amount = Number(value);
 
@@ -230,7 +218,7 @@ function getValidPrice(value, fallback) {
     return Number(fallback) || 100;
 }
 
-function drawChart(prices, timestamps, range) {
+function drawChart(prices, isUptrending) {
     const chartLine = document.querySelector("#chart-line");
 
     if (!chartLine || !Array.isArray(prices) || prices.length < 2) {
@@ -266,7 +254,7 @@ function drawChart(prices, timestamps, range) {
         }) 
         .join(" ");
 
-    const lineColor = points[points.length - 1] >= points[0] ? "#4ade80" : "#f59e94";
+    const lineColor = isUptrending ? "#22c55e" : "#ef4444";
 
     chartLine.setAttribute("points", pointString);
     chartLine.setAttribute("fill", "none");
@@ -280,34 +268,14 @@ function drawChart(prices, timestamps, range) {
     document.querySelector("#chart-mid-bottom-label").textContent = (min + priceRange * 0.33).toFixed(2);
     document.querySelector("#chart-min-label").textContent = min.toFixed(2);
 
-    updateChartTimeLabels(timestamps, range);
+    clearChartTimeLabels();
 }
 
-function updateChartTimeLabels(timestamps, range) {
+function clearChartTimeLabels() {
     const labels = Array.from(document.querySelectorAll("#price-chart .time-label"));
 
-    if (labels.length === 0) {
-        return;
-    }
-
-    if (!Array.isArray(timestamps) || timestamps.length === 0) {
-        labels.forEach((label) => {
-            label.textContent = "--";
-        });
-        return;
-    }
-
-    const formatter = new Intl.DateTimeFormat("en-US", {
-        month: "short",
-        day: "numeric"
-    });
-    const lastIndex = timestamps.length - 1;
-
-    labels.forEach((label, labelIndex) => {
-        const timestampIndex = Math.round((labelIndex / (labels.length - 1)) * lastIndex);
-        const timestamp = timestamps[timestampIndex];
-
-        label.textContent = formatter.format(new Date(timestamp * 1000));
+    labels.forEach((label) => {
+        label.textContent = "";
     });
 }
 
