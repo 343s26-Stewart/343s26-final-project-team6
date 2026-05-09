@@ -145,6 +145,7 @@ async function buildStockReport(stock, portfolioEntry) {
         currentPrice: fallbackBasePrice,
         change24h: 0,
         history: createFallbackTrendData(fallbackBasePrice),
+        isUptrending: true,
         shares: portfolioEntry?.shares || 0,
         averageCost: portfolioEntry?.averageCost || 0,
         gainLoss: 0
@@ -164,6 +165,7 @@ async function buildStockReport(stock, portfolioEntry) {
             report.currentPrice = quote.c;
             report.change24h = typeof quote.d === "number" ? quote.d : quote.c - (quote.pc || quote.c);
             report.history = buildTrendDataFromQuote(quote);
+            report.isUptrending = isQuoteUptrending(quote);
         }
     } catch (error) {
         console.error(`Failed to fetch report data for ${stock.symbol}:`, error);
@@ -193,7 +195,7 @@ function renderMarketTable(reportRows, container) {
                 </div>
             </div>
             <div class="report-cell" data-label="${translate("reports_market_col_month")}">
-                <div class="chart-shell">${createSparklineSVG(stock.history, stock.symbol, index)}</div>
+                <div class="chart-shell">${createSparklineSVG(stock.history, stock.symbol, index, stock.isUptrending)}</div>
             </div>
             <div class="report-cell" data-label="${translate("reports_market_col_change")}">
                 <span class="change-value ${stock.change24h >= 0 ? "change-positive" : "change-negative"}">
@@ -278,7 +280,7 @@ function updateTotalGainLoss(reportRows) {
     totalElement.classList.toggle("gain-negative", total < 0);
 }
 
-function createSparklineSVG(points, symbol, index) {
+function createSparklineSVG(points, symbol, index, isUptrending) {
     const width = 420;
     const height = 150;
     const padding = { top: 18, right: 18, bottom: 24, left: 22 };
@@ -293,7 +295,7 @@ function createSparklineSVG(points, symbol, index) {
         return `${x.toFixed(2)},${y.toFixed(2)}`;
     }).join(" ");
 
-    const lineColor = points[points.length - 1] >= points[0] ? "#f4a18d" : "#d7dce5";
+    const lineColor = isUptrending ? "#22c55e" : "#ef4444";
     const baselineOne = padding.top + usableHeight * 0.33;
     const baselineTwo = padding.top + usableHeight * 0.66;
 
@@ -349,6 +351,14 @@ function buildTrendDataFromQuote(quote) {
     anchorPoints.push(current);
 
     return interpolateTrendPoints(anchorPoints, 25);
+}
+
+function isQuoteUptrending(quote) {
+    const previousClose = getValidPrice(quote.pc, quote.c);
+    const open = getValidPrice(quote.o, previousClose);
+    const current = getValidPrice(quote.c, open);
+
+    return current >= open;
 }
 
 function interpolateTrendPoints(anchorPoints, totalPoints) {
