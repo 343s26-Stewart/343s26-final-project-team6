@@ -171,7 +171,7 @@ function buildQuoteBasedChartData(quote) {
 
     return {
         prices,
-        isUptrending: current >= previousClose
+        isUptrending: current >= open
     };
 }
 
@@ -259,6 +259,7 @@ function drawChart(prices, isUptrending) {
     chartLine.setAttribute("points", pointString);
     chartLine.setAttribute("fill", "none");
     chartLine.setAttribute("stroke", lineColor);
+    chartLine.style.stroke = lineColor;
     chartLine.setAttribute("stroke-width", "4");
     chartLine.setAttribute("stroke-linecap", "round");
     chartLine.setAttribute("stroke-linejoin", "round");

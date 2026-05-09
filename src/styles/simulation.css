@@ -138,7 +138,6 @@
 }
 
 #chart-line {
-    stroke: #f59e94;
     transition: stroke 0.25s ease;
 }
 
