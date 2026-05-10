@@ -1,4 +1,4 @@
-const I18N_STORAGE_KEY = "site_language";
+const LANGUAGE_STORAGE_KEY = "site_language";
 const DEFAULT_LANGUAGE = "en";
 
 const TRANSLATIONS = {
@@ -223,7 +223,7 @@ const TRANSLATIONS = {
 };
 
 function getLanguage() {
-    const savedLanguage = localStorage.getItem(I18N_STORAGE_KEY);
+    const savedLanguage = localStorage.getItem(LANGUAGE_STORAGE_KEY);
     if (savedLanguage && TRANSLATIONS[savedLanguage]) {
         return savedLanguage;
     }
@@ -232,7 +232,7 @@ function getLanguage() {
 
 function setLanguage(language) {
     const nextLanguage = TRANSLATIONS[language] ? language : DEFAULT_LANGUAGE;
-    localStorage.setItem(I18N_STORAGE_KEY, nextLanguage);
+    localStorage.setItem(LANGUAGE_STORAGE_KEY, nextLanguage);
     applyTranslations(nextLanguage);
     document.dispatchEvent(new CustomEvent("languageChanged", { detail: { language: nextLanguage } }));
 }
