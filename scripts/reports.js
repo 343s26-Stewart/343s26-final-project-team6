@@ -1,5 +1,6 @@
 const FAVORITES_KEY = "favorites";
 const PORTFOLIO_KEY = "portfolio";
+const TRANSACTIONS_KEY = "transactions";
 const MARKET_VIEW_KEY = "reports_market_view";
 let currentReportRows = [];
 let currentMarketView = "list";
@@ -12,14 +13,14 @@ function translate(key, params = {}) {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
-    insertExportButton();
+    insertReportActionButtons();
     initializeMarketViewToggle();
     initializeReportsPage();
 });
 
 
-// adds in functionality to the export button
-function insertExportButton() {
+// adds in functionality to the export and import buttons
+function insertReportActionButtons() {
     const reportsPage = document.querySelector(".reports-page");
 
     // if its not yet loaded return
@@ -39,50 +40,232 @@ function insertExportButton() {
 
     // When the export button is clicked,
     exportButton.addEventListener("click", () => {
-
-        // format of the JSON obj and put in data
-        const jsonObj = {
-            exportedAt: new Date().toISOString(),
-            totalGainLoss: currentReportRows.reduce((sum, stock) => sum + stock.gainLoss, 0),
-            savedStocks: currentReportRows.map((stock) => ({
-                symbol: stock.symbol,
-                company: stock.company,
-                currentPrice: stock.currentPrice,
-                change24h: stock.change24h,
-                history: stock.history
-            })),
-            portfolioHoldings: currentReportRows
-                .filter((stock) => stock.shares > 0)
-                .map((stock) => ({
-                    symbol: stock.symbol,
-                    company: stock.company,
-                    shares: stock.shares,
-                    averageCost: stock.averageCost,
-                    currentPrice: stock.currentPrice,
-                    gainLoss: stock.gainLoss
-                }))
-        };
-
-        // make the exported data a string
-        const data = JSON.stringify(jsonObj, null, 2);
-        const blob = new Blob([data], { type: "application/json" });
-        const jsonObjectUrl = URL.createObjectURL(blob);
-        
-        // create file
-        const filename = `reports-export-${formatExportDate(new Date())}.json`;
-        const anchorEl = document.createElement("a");
-
-        // actually download the file
-        anchorEl.href = jsonObjectUrl;
-        anchorEl.download = filename;
-        anchorEl.click();
-
-        URL.revokeObjectURL(jsonObjectUrl);
+        exportReportsJson();
     });
 
+    const importInput = document.createElement("input");
+    importInput.id = "import-reports-input";
+    importInput.type = "file";
+    importInput.accept = "application/json,.json";
+    importInput.className = "report-import-input";
+
+    const importButton = document.createElement("button");
+    importButton.id = "import-reports-button";
+    importButton.className = "page-action-button";
+    importButton.type = "button";
+    importButton.textContent = translate("reports_import_json");
+
+    importButton.addEventListener("click", () => {
+        importInput.click();
+    });
+
+    importInput.addEventListener("change", async () => {
+        const [file] = importInput.files;
+
+        if (!file) {
+            return;
+        }
+
+        await importReportsJson(file);
+        importInput.value = "";
+    });
+
+    const importStatus = document.createElement("p");
+    importStatus.id = "reports-import-status";
+    importStatus.className = "reports-import-status";
+    importStatus.setAttribute("aria-live", "polite");
+
     // add the element to the page
+    actionBar.appendChild(importInput);
+    actionBar.appendChild(importButton);
     actionBar.appendChild(exportButton);
+    actionBar.appendChild(importStatus);
     reportsPage.prepend(actionBar);
+}
+
+function exportReportsJson() {
+    const exportedAt = new Date();
+
+    // format of the JSON obj and put in data
+    const jsonObj = {
+        version: 2,
+        exportedAt: exportedAt.toISOString(),
+        appData: {
+            favorites: getFavorites(),
+            portfolio: getPortfolio(),
+            transactions: getTransactions()
+        },
+        totalGainLoss: currentReportRows.reduce((sum, stock) => sum + stock.gainLoss, 0),
+        savedStocks: currentReportRows.map((stock) => ({
+            symbol: stock.symbol,
+            company: stock.company,
+            currentPrice: stock.currentPrice,
+            change24h: stock.change24h,
+            history: stock.history
+        })),
+        portfolioHoldings: currentReportRows
+            .filter((stock) => stock.shares > 0)
+            .map((stock) => ({
+                symbol: stock.symbol,
+                company: stock.company,
+                shares: stock.shares,
+                averageCost: stock.averageCost,
+                currentPrice: stock.currentPrice,
+                gainLoss: stock.gainLoss
+            }))
+    };
+
+    // make the exported data a string
+    const data = JSON.stringify(jsonObj, null, 2);
+    const blob = new Blob([data], { type: "application/json" });
+    const jsonObjectUrl = URL.createObjectURL(blob);
+
+    // create file
+    const filename = `reports-export-${formatExportDate(exportedAt)}.json`;
+    const anchorEl = document.createElement("a");
+
+    // actually download the file
+    anchorEl.href = jsonObjectUrl;
+    anchorEl.download = filename;
+    anchorEl.click();
+
+    URL.revokeObjectURL(jsonObjectUrl);
+}
+
+async function importReportsJson(file) {
+    try {
+        const parsed = JSON.parse(await file.text());
+        const importData = normalizeReportImport(parsed);
+
+        if (!importData) {
+            throw new Error("Unsupported report import format.");
+        }
+
+        localStorage.setItem(FAVORITES_KEY, JSON.stringify(importData.favorites));
+        localStorage.setItem(PORTFOLIO_KEY, JSON.stringify(importData.portfolio));
+        localStorage.setItem(TRANSACTIONS_KEY, JSON.stringify(importData.transactions));
+
+        setImportStatus(translate("reports_import_success"));
+        await initializeReportsPage();
+    } catch (error) {
+        console.error("Failed to import reports JSON:", error);
+        setImportStatus(translate("reports_import_error"), true);
+    }
+}
+
+function normalizeReportImport(parsed) {
+    if (!parsed || typeof parsed !== "object") {
+        return null;
+    }
+
+    const appData = parsed.appData && typeof parsed.appData === "object" ? parsed.appData : {};
+    const favorites = normalizeFavorites(appData.favorites || parsed.favorites || parsed.savedStocks);
+    const portfolio = normalizePortfolio(appData.portfolio || parsed.portfolio || parsed.portfolioHoldings);
+    const transactions = normalizeTransactions(appData.transactions || parsed.transactions);
+
+    Object.keys(portfolio).forEach((symbol) => {
+        if (!favorites.includes(symbol)) {
+            favorites.push(symbol);
+        }
+    });
+
+    if (!favorites.length && !Object.keys(portfolio).length && !transactions.length) {
+        return null;
+    }
+
+    return {
+        favorites,
+        portfolio,
+        transactions
+    };
+}
+
+function normalizeFavorites(value) {
+    if (!Array.isArray(value)) {
+        return [];
+    }
+
+    const symbols = value
+        .map((item) => {
+            if (typeof item === "string") {
+                return item;
+            }
+
+            return item?.symbol;
+        })
+        .map((symbol) => String(symbol || "").trim().toUpperCase())
+        .filter(Boolean);
+
+    return Array.from(new Set(symbols));
+}
+
+function normalizePortfolio(value) {
+    const portfolio = {};
+    const entries = Array.isArray(value)
+        ? value.map((entry) => [entry?.symbol, entry])
+        : Object.entries(value || {});
+
+    entries.forEach(([key, entry]) => {
+        if (!entry || typeof entry !== "object") {
+            return;
+        }
+
+        const symbol = String(entry.symbol || key || "").trim().toUpperCase();
+        const shares = Number(entry.shares);
+        const averageCost = Number(entry.averageCost);
+
+        if (!symbol || !Number.isFinite(shares) || shares < 0 || !Number.isFinite(averageCost) || averageCost < 0) {
+            return;
+        }
+
+        portfolio[symbol] = {
+            symbol,
+            company: String(entry.company || symbol),
+            shares,
+            averageCost
+        };
+    });
+
+    return portfolio;
+}
+
+function normalizeTransactions(value) {
+    if (!Array.isArray(value)) {
+        return [];
+    }
+
+    return value
+        .map((trade) => {
+            const symbol = String(trade?.symbol || "").trim().toUpperCase();
+            const type = String(trade?.type || "").toLowerCase();
+            const shares = Number(trade?.shares);
+            const price = Number(trade?.price);
+            const date = trade?.date ? new Date(trade.date) : new Date();
+
+            if (!symbol || !["buy", "sell"].includes(type) || !Number.isFinite(shares) || shares <= 0 || !Number.isFinite(price) || price <= 0) {
+                return null;
+            }
+
+            return {
+                symbol,
+                type,
+                shares,
+                price,
+                date: Number.isNaN(date.getTime()) ? new Date().toISOString() : date.toISOString()
+            };
+        })
+        .filter(Boolean);
+}
+
+function setImportStatus(message, isError = false) {
+    const status = document.querySelector("#reports-import-status");
+
+    if (!status) {
+        return;
+    }
+
+    status.textContent = message;
+    status.classList.toggle("reports-import-status-error", isError);
 }
 
 // goes into local storage and applies either the list or card mode view
@@ -318,6 +501,11 @@ document.addEventListener("languageChanged", () => {
         exportButton.textContent = translate("reports_export_json");
     }
 
+    const importButton = document.querySelector("#import-reports-button");
+    if (importButton) {
+        importButton.textContent = translate("reports_import_json");
+    }
+
     const toggleButton = document.querySelector("#market-view-toggle");
     const reportsCard = toggleButton?.closest(".reports-card");
     if (toggleButton && reportsCard) {
@@ -404,6 +592,18 @@ function getPortfolio() {
     } catch (error) {
         console.error("Could not read saved portfolio:", error);
         return {};
+    }
+}
+
+function getTransactions() {
+    try {
+        const saved = localStorage.getItem(TRANSACTIONS_KEY);
+        const parsed = saved ? JSON.parse(saved) : [];
+
+        return Array.isArray(parsed) ? parsed : [];
+    } catch (error) {
+        console.error("Could not read saved transactions:", error);
+        return [];
     }
 }
 

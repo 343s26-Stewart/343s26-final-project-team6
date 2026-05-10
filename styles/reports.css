@@ -17,8 +17,15 @@
 
 .reports-page-actions {
     display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.65rem;
     justify-content: flex-end;
     margin-bottom: 0.85rem;
+}
+
+.report-import-input {
+    display: none;
 }
 
 .page-action-button {
@@ -31,6 +38,22 @@
     font-weight: 700;
     letter-spacing: 0.03em;
     cursor: pointer;
+}
+
+.reports-import-status {
+    flex-basis: 100%;
+    color: var(--reports-text-soft);
+    font-size: 0.9rem;
+    margin: 0;
+    text-align: right;
+}
+
+.reports-import-status:empty {
+    display: none;
+}
+
+.reports-import-status-error {
+    color: #fecaca;
 }
 
 .page-action-button:focus-visible {
@@ -409,8 +432,10 @@
         justify-content: stretch;
     }
 
-    .page-action-button {
+    .page-action-button,
+    .reports-import-status {
         width: 100%;
+        text-align: center;
     }
 
     .report-row,
